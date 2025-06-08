@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ClientesModel;
+use App\Models\ComprasModel;
 use CodeIgniter\Controller;
 
 class Clientes extends Controller
@@ -110,4 +111,18 @@ class Clientes extends Controller
         $model->delete($id);
         return redirect()->to('/clientes');
     }
+
+    public function historico($id)
+{
+    $clienteModel = new ClientesModel();
+    $pedidoModel = new \App\Models\PedidosModel();
+
+    $cliente = $clienteModel->find($id);
+    $pedidos = $pedidoModel->where('cliente_id', $id)->findAll();
+
+    return view('clientes/historico', [
+        'cliente' => $cliente,
+        'pedidos' => $pedidos
+    ]);
+}
 }

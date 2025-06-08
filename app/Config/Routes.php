@@ -14,5 +14,10 @@ $routes->post('clientes/atualizar/(:num)', 'Clientes::atualizar/$1');
 $routes->get('clientes/excluir/(:num)', 'Clientes::excluir/$1');
 $routes->get('/dashboard', 'Dashboard::index');
 $routes->get('clientes/cidades/(:num)', 'Clientes::getCidades/$1');
+$routes->get('pedidos/adicionar', 'Pedidos::adicionar');
+$routes->post('pedidos/salvar', 'Pedidos::salvar');
+$routes->get('clientes/historico/(:num)', 'Clientes::historico/$1');
+
+
 
 

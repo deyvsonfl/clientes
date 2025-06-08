@@ -72,8 +72,9 @@
                 <td><?= esc($cliente['status']) ?></td>
                 <td><?= $cliente['recorrente'] ? 'Sim' : 'Não' ?></td>
                 <td>
-                    <a href="<?= base_url('/clientes/editar/' . $cliente['id']) ?>">Editar</a> |
-                    <a href="<?= base_url('/clientes/excluir/' . $cliente['id']) ?>" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                  <a href="<?= base_url('clientes/editar/' . $cliente['id']) ?>">Editar</a> |
+                  <a href="<?= base_url('clientes/excluir/' . $cliente['id']) ?>" onclick="return confirm('Tem certeza?')">Excluir</a> |
+                  <a href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente['nome'])) ?>">Adicionar Pedido</a>
                 </td>
             </tr>
         <?php endforeach; ?>
