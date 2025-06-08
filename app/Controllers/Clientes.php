@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\ClienteModel;
 use App\Models\ComprasModel;
 use CodeIgniter\Controller;
+use App\Models\PedidosModel;
 
 class Clientes extends Controller
 {
@@ -20,41 +21,49 @@ class Clientes extends Controller
         return view('clientes/form');
     }
 
-    public function salvar()
-    {
-        helper(['form']);
+   public function salvar()
+{
+    helper(['form']);
 
-        $validationRules = [
-            'nome'     => 'required|min_length[3]',
-            'telefone' => 'required|valid_phone',
-            'cep'      => 'permit_empty|valid_cep'
-        ];
+    $validationRules = [
+        'nome'      => 'required|min_length[3]',
+        'telefone'  => 'required|valid_phone',
+        'cep'       => 'permit_empty|valid_cep',
+        'estado'    => 'required',
+        'cidade'    => 'required',
+        'bairro'    => 'required',
+        'endereco'  => 'required',
+    ];
 
-        if (! $this->validate($validationRules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        $model = new ClienteModel();
-
-        $data = [
-            'nome' => $this->request->getPost('nome'),
-            'telefone' => $this->request->getPost('telefone'),
-            'instagram' => $this->request->getPost('instagram'),
-            'cep' => $this->request->getPost('cep'),
-            'estado' => $this->request->getPost('estado'),
-            'cidade' => $this->request->getPost('cidade'),
-            'bairro' => $this->request->getPost('bairro'),
-            'endereco' => $this->request->getPost('endereco'),
-            'data_ultima_compra' => $this->request->getPost('data_ultima_compra'),
-            'total_gasto' => $this->request->getPost('total_gasto'),
-            'status' => $this->request->getPost('status'),
-            'recorrente' => $this->request->getPost('recorrente'),
-            'nicho' => $this->request->getPost('nicho')
-        ];
-
-        $model->save($data);
-        return redirect()->to('/clientes');
+    if (! $this->validate($validationRules)) {
+        return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
     }
+
+    $input = $this->request->getPost();
+
+    $data = [
+        'nome'               => trim($input['nome']),
+        'telefone'           => trim($input['telefone']),
+        'instagram'          => trim($input['instagram'] ?? ''),
+        'cep'                => trim($input['cep'] ?? ''),
+        'estado'             => $input['estado'],
+        'cidade'             => $input['cidade'],
+        'bairro'             => $input['bairro'],
+        'endereco'           => $input['endereco'],
+        'nicho'              => $input['nicho'] ?? '',
+        'data_ultima_compra' => null,
+        'total_gasto'        => floatval(str_replace(',', '.', preg_replace('/[^\d,]/', '', $input['total_gasto'] ?? 0)))
+    ];
+
+    $model = new \App\Models\ClienteModel();
+    $model->save($data);
+
+    $clienteId = $model->getInsertID(); // pega o ID do cliente recém-cadastrado
+
+    // Redirecionar diretamente para o pedido
+    return redirect()->to('/pedidos/adicionar?cliente_id=' . $clienteId)
+                     ->with('success', 'Cliente cadastrado com sucesso. Agora você pode adicionar um pedido.');
+}
 
     public function editar($id)
     {

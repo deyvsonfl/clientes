@@ -20,7 +20,7 @@
 
     <form method="post" action="<?= isset($pedido) ? base_url('pedidos/atualizar/' . $pedido['id']) : base_url('pedidos/salvar') ?>">
         <div class="mb-3">
-            <label for="cliente" class="form-label">Nome do Cliente:</label>
+            <label for="cliente_id">Cliente</label>
             <select name="cliente" id="cliente" class="form-select" required>
                 <option value="">Selecione um cliente</option>
                 <?php foreach ($clientes as $cli): ?>

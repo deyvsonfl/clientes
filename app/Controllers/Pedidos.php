@@ -9,22 +9,23 @@ use CodeIgniter\I18n\Time;
 class Pedidos extends Controller
 {
     public function adicionar()
-    {
-        $clienteNome = $this->request->getGet('cliente');
-        $cliente = null;
+{
+    $clienteId = $this->request->getGet('cliente_id');
+    $cliente = null;
 
-        $clienteModel = new ClienteModel();
-        $clientes = $clienteModel->findAll();
+    $clienteModel = new \App\Models\ClienteModel();
+    $clientes = $clienteModel->findAll();
 
-        if ($clienteNome) {
-            $cliente = $clienteModel->where('nome', $clienteNome)->first();
-        }
-
-        return view('pedidos/form', [
-            'cliente' => $cliente,
-            'clientes' => $clientes
-        ]);
+    if ($clienteId) {
+        $cliente = $clienteModel->find($clienteId);
     }
+
+    return view('pedidos/form', [
+        'cliente' => $cliente,
+        'clientes' => $clientes
+    ]);
+}
+
 
     public function salvar()
 {
