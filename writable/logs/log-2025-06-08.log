@@ -317,3 +317,36 @@ DEBUG - 2025-06-08 06:49:55 --> Session: Class initialized using 'CodeIgniter\Se
 DEBUG - 2025-06-08 06:50:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-06-08 06:54:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 DEBUG - 2025-06-08 06:54:29 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-06-08 06:58:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-06-08 07:04:30 --> ErrorException: Cannot declare class App\Controllers\Pedidos, because the name is already in use
+[Method: GET, Route: pedidos/adicionar]
+in APPPATH\Views\pedidos\form.php on line 8.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2025-06-08 07:16:37 --> TypeError: number_format(): Argument #1 ($num) must be of type float, string given
+[Method: GET, Route: pedidos/adicionar]
+in APPPATH\Views\pedidos\form.php on line 15.
+ 1 APPPATH\Views\pedidos\form.php(15): number_format('', 2, ',', '.')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\clientes\\app\\Views\\pedidos\\form.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('pedidos/form', [], true)
+ 5 APPPATH\Controllers\Pedidos.php(19): view('pedidos/form', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Pedidos->adicionar()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Pedidos))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-06-08 07:16:43 --> TypeError: number_format(): Argument #1 ($num) must be of type float, string given
+[Method: GET, Route: pedidos/adicionar]
+in APPPATH\Views\pedidos\form.php on line 15.
+ 1 APPPATH\Views\pedidos\form.php(15): number_format('', 2, ',', '.')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\clientes\\app\\Views\\pedidos\\form.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('pedidos/form', [], true)
+ 5 APPPATH\Controllers\Pedidos.php(19): view('pedidos/form', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Pedidos->adicionar()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Pedidos))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

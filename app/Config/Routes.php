@@ -17,6 +17,9 @@ $routes->get('clientes/cidades/(:num)', 'Clientes::getCidades/$1');
 $routes->get('pedidos/adicionar', 'Pedidos::adicionar');
 $routes->post('pedidos/salvar', 'Pedidos::salvar');
 $routes->get('clientes/historico/(:num)', 'Clientes::historico/$1');
+$routes->get('pedidos/editar/(:num)', 'Pedidos::editar/$1');
+$routes->post('pedidos/atualizar/(:num)', 'Pedidos::atualizar/$1');
+$routes->get('pedidos/excluir/(:num)', 'Pedidos::excluir/$1');
 
 
 
