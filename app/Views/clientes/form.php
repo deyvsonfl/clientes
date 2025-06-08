@@ -1,85 +1,84 @@
 <?php $this->extend('layouts/main'); ?>
-
 <?php $this->section('content'); ?>
+
 <h1><?= isset($cliente) ? 'Editar Cliente' : 'Novo Cliente' ?></h1>
 
-<form method="post" action="<?= isset($cliente['id']) ? base_url('clientes/atualizar/' . $cliente['id']) : base_url('clientes/salvar') ?>">
+<form method="post" action="<?= isset($cliente) ? base_url('/clientes/atualizar/' . $cliente['id']) : base_url('/clientes/salvar') ?>">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" name="nome" id="nome" value="<?= esc($cliente['nome'] ?? '') ?>" required>
+        </div>
 
-    <label for="nome">Nome:</label>
-    <input type="text" name="nome" id="nome" value="<?= esc($cliente['nome'] ?? '') ?>" required>
-    <?php if (!empty(session('errors.nome'))): ?><div class="error"><?= esc(session('errors.nome')) ?></div><?php endif; ?>
+        <div class="col-md-6">
+            <label for="telefone" class="form-label">Telefone:</label>
+            <input type="text" class="form-control" name="telefone" id="telefone" value="<?= esc($cliente['telefone'] ?? '') ?>" required>
+        </div>
 
-    <label for="telefone">Telefone:</label>
-    <input type="text" name="telefone" id="telefone" class="telefone" value="<?= esc($cliente['telefone'] ?? '') ?>" required pattern="\(\d{2}\) \d{5}-\d{4}" title="Digite um telefone válido no formato (99) 99999-9999">
-    <?php if (!empty(session('errors.telefone'))): ?><div class="error"><?= esc(session('errors.telefone')) ?></div><?php endif; ?>
+        <div class="col-md-6">
+            <label for="instagram" class="form-label">Instagram:</label>
+            <input type="text" class="form-control" name="instagram" id="instagram" value="<?= esc($cliente['instagram'] ?? '') ?>">
+        </div>
 
-    <label for="instagram">Instagram:</label>
-    <input type="text" name="instagram" id="instagram" value="<?= esc($cliente['instagram'] ?? '') ?>">
+        <div class="col-md-6">
+            <label for="cep" class="form-label">CEP:</label>
+            <input type="text" class="form-control" name="cep" id="cep" value="<?= esc($cliente['cep'] ?? '') ?>">
+        </div>
 
-    <label for="cep">CEP:</label>
-    <input type="text" name="cep" id="cep" class="cep" maxlength="9" placeholder="Digite o CEP" value="<?= esc($cliente['cep'] ?? '') ?>" required pattern="\d{5}-\d{3}" title="Digite um CEP válido no formato 00000-000">
-    <?php if (!empty(session('errors.cep'))): ?><div class="error"><?= esc(session('errors.cep')) ?></div><?php endif; ?>
+        <div class="col-md-4">
+            <label for="estado" class="form-label">Estado:</label>
+            <input type="text" class="form-control" name="estado" id="estado" value="<?= esc($cliente['estado'] ?? '') ?>">
+        </div>
 
-    <label for="estado">Estado:</label>
-    <input type="text" name="estado" id="estado" value="<?= esc($cliente['estado'] ?? '') ?>" required>
+        <div class="col-md-4">
+            <label for="cidade" class="form-label">Cidade:</label>
+            <input type="text" class="form-control" name="cidade" id="cidade" value="<?= esc($cliente['cidade'] ?? '') ?>">
+        </div>
 
-    <label for="cidade">Cidade:</label>
-    <input type="text" name="cidade" id="cidade" value="<?= esc($cliente['cidade'] ?? '') ?>" required>
+        <div class="col-md-4">
+            <label for="bairro" class="form-label">Bairro:</label>
+            <input type="text" class="form-control" name="bairro" id="bairro" value="<?= esc($cliente['bairro'] ?? '') ?>">
+        </div>
 
-    <label for="bairro">Bairro:</label>
-    <input type="text" name="bairro" id="bairro" value="<?= esc($cliente['bairro'] ?? '') ?>">
+        <div class="col-md-12">
+            <label for="endereco" class="form-label">Endereço:</label>
+            <input type="text" class="form-control" name="endereco" id="endereco" value="<?= esc($cliente['endereco'] ?? '') ?>">
+        </div>
 
-    <label for="endereco">Endereço:</label>
-    <input type="text" name="endereco" id="endereco" value="<?= esc($cliente['endereco'] ?? '') ?>">
+        <div class="col-md-6">
+            <label for="nicho" class="form-label">Nicho de atuação:</label>
+            <input type="text" class="form-control" name="nicho" id="nicho" value="<?= esc($cliente['nicho'] ?? '') ?>">
+        </div>
 
-    <label for="data_ultima_compra">Data da Última Compra:</label>
-    <input type="date" name="data_ultima_compra" id="data_ultima_compra" value="<?= esc($cliente['data_ultima_compra'] ?? '') ?>">
+        <div class="col-md-6">
+            <label for="valor" class="form-label">Valor Inicial (se houver):</label>
+            <input type="number" step="0.01" class="form-control" name="total_gasto" id="total_gasto" value="<?= esc($cliente['total_gasto'] ?? '') ?>">
+        </div>
 
-    <label for="total_gasto">Total Gasto:</label>
-    <input type="text" name="total_gasto" id="total_gasto" class="total_gasto" value="<?= esc($cliente['total_gasto'] ?? '') ?>">
-
-    <label for="status">Status:</label>
-    <input type="text" name="status" id="status" value="<?= esc($cliente['status'] ?? '') ?>">
-
-    <label for="recorrente">Recorrente:</label>
-    <select name="recorrente" id="recorrente">
-        <option value="0" <?= isset($cliente['recorrente']) && !$cliente['recorrente'] ? 'selected' : '' ?>>Não</option>
-        <option value="1" <?= isset($cliente['recorrente']) && $cliente['recorrente'] ? 'selected' : '' ?>>Sim</option>
-    </select>
-
-    <label for="nicho">Nicho:</label>
-    <input type="text" name="nicho" id="nicho" value="<?= esc($cliente['nicho'] ?? '') ?>">
-
-    <button type="submit">Salvar</button>
+        <div class="col-12">
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a href="<?= base_url('/clientes') ?>" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </div>
 </form>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#telefone').inputmask('(99) 99999-9999');
-    $('#cep').inputmask('99999-999');
-    $('#total_gasto').inputmask('currency', {
-        prefix: 'R$ ',
-        groupSeparator: '.',
-        radixPoint: ',',
-        autoUnmask: true,
-        removeMaskOnSubmit: true
-    });
-
-    $('#cep').on('blur', function() {
-        const cep = $(this).val().replace(/\D/g, '');
-        if (cep.length !== 8) return;
-
-        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function(data) {
-            if (!data.erro) {
-                $('#estado').val(data.uf);
-                $('#cidade').val(data.localidade);
-                $('#bairro').val(data.bairro);
-                $('#endereco').val(data.logradouro);
-            }
-        });
-    });
+document.getElementById('cep').addEventListener('blur', function () {
+    let cep = this.value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.erro) {
+                    document.getElementById('estado').value = data.uf;
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('bairro').value = data.bairro;
+                    document.getElementById('endereco').value = data.logradouro;
+                }
+            })
+            .catch(error => console.error('Erro ao consultar o CEP:', error));
+    }
 });
 </script>
+
 <?php $this->endSection(); ?>

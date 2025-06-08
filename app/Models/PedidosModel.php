@@ -8,18 +8,17 @@ class PedidosModel extends Model
 {
     protected $table = 'pedidos';
     protected $primaryKey = 'id';
+
     protected $allowedFields = [
         'cliente_id',
         'data_compra',
         'valor',
-        'descricao'
+        'descricao',
     ];
-    protected $useTimestamps = false;
 
-    public function getPedidosByClienteId($clienteId)
-    {
-        return $this->where('cliente_id', $clienteId)
-                    ->orderBy('data_compra', 'DESC')
-                    ->findAll();
-    }
+    protected array $casts = [
+        'cliente_id' => 'integer',
+        'valor' => 'float',
+        // 'data_compra' removido
+    ];
 }

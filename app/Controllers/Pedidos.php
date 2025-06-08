@@ -2,8 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\{PedidosModel, ClientesModel};
+use App\Models\{PedidosModel, ClienteModel};
 use CodeIgniter\Controller;
+use CodeIgniter\I18n\Time;
 
 class Pedidos extends Controller
 {
@@ -12,56 +13,62 @@ class Pedidos extends Controller
         $clienteNome = $this->request->getGet('cliente');
         $cliente = null;
 
+        $clienteModel = new ClienteModel();
+        $clientes = $clienteModel->findAll();
+
         if ($clienteNome) {
-            $cliente = (new ClientesModel())->where('nome', $clienteNome)->first();
+            $cliente = $clienteModel->where('nome', $clienteNome)->first();
         }
 
-        return view('pedidos/form', ['cliente' => $cliente]);
+        return view('pedidos/form', [
+            'cliente' => $cliente,
+            'clientes' => $clientes
+        ]);
     }
 
     public function salvar()
-    {
-        $clienteNome = $this->request->getPost('cliente');
-        $clienteModel = new ClientesModel();
-        $cliente = $clienteModel->where('nome', $clienteNome)->first();
+{
+    $clienteNome = $this->request->getPost('cliente');
+    $clienteModel = new ClienteModel();
+    $cliente = $clienteModel->where('nome', $clienteNome)->first();
 
-        if (!$cliente) {
-            return redirect()->to('/clientes/criar')->with('error', 'Cliente não encontrado. Por favor, cadastre-o primeiro.');
-        }
-        $valor = str_replace(['R$', '.', ','], ['', '', '.'], $this->request->getPost('valor'));
-        $valor = (float) $valor;
-        $data = $this->request->getPost('data');
-        $descricao = $this->request->getPost('descricao');
-
-        $erros = [];
-        if ($valor <= 0) {
-            $erros[] = 'O valor do pedido deve ser maior que zero.';
-        }
-        if (empty($data)) {
-            $erros[] = 'A data do pedido é obrigatória.';
-        }
-        if (empty($clienteNome)) {
-            $erros[] = 'O nome do cliente é obrigatório.';
-        }
-
-        if (!empty($erros)) {
-            return redirect()->back()->withInput()->with('errors', $erros);
-        }
-
-        $pedidoModel = new PedidosModel();
-        $pedidoModel->insert([
-            'cliente_id' => $cliente['id'],
-            'valor' => $valor,
-            'data_compra' => $data,
-            'descricao' => $descricao,
-        ]);
-
-        $cliente['total_gasto'] += $valor;
-        $cliente['data_ultima_compra'] = $data;
-        $clienteModel->save($cliente);
-
-        return redirect()->to('/clientes/historico/' . $cliente['id']);
+    if (!$cliente) {
+        return redirect()->to('/clientes/criar')->with('error', 'Não encontramos esse cliente. Você pode cadastrá-lo antes de continuar.');
     }
+
+    $valor = (float) $this->request->getPost('valor');
+    $data = $this->request->getPost('data');
+    $descricao = $this->request->getPost('descricao');
+
+    $erros = [];
+    if ($valor <= 0) {
+        $erros[] = 'Informe um valor maior que zero para o pedido.';
+    }
+    if (empty($data)) {
+        $erros[] = 'A data da compra é obrigatória.';
+    }
+    if (empty($clienteNome)) {
+        $erros[] = 'O nome do cliente precisa ser informado.';
+    }
+
+    if (!empty($erros)) {
+        return redirect()->back()->withInput()->with('errors', $erros);
+    }
+
+    $pedidoModel = new PedidosModel();
+    $pedidoModel->insert([
+        'cliente_id' => $cliente['id'],
+        'valor' => $valor,
+        'data_compra' => $data, // agora salva corretamente como 'Y-m-d'
+        'descricao' => $descricao,
+    ]);
+
+    $cliente['total_gasto'] += $valor;
+    $cliente['data_ultima_compra'] = $data;
+    $clienteModel->save($cliente);
+
+    return redirect()->to('/clientes/historico/' . $cliente['id'])->with('success', 'Pedido cadastrado com sucesso!');
+}
 
     public function editar($id)
     {
@@ -69,15 +76,19 @@ class Pedidos extends Controller
         $pedido = $pedidoModel->find($id);
 
         if (!$pedido) {
-            return redirect()->back()->with('error', 'Pedido não encontrado.');
+            return redirect()->back()->with('error', 'Não foi possível localizar este pedido.');
         }
 
         $clienteModel = new ClientesModel();
         $cliente = $clienteModel->find($pedido['cliente_id']);
+        $clientes = $clienteModel->findAll();
+
+        $pedido['valor'] = number_format((float) $pedido['valor'], 2, '.', '');
 
         return view('pedidos/form', [
             'pedido' => $pedido,
-            'cliente' => $cliente
+            'cliente' => $cliente,
+            'clientes' => $clientes
         ]);
     }
 
@@ -87,7 +98,7 @@ class Pedidos extends Controller
         $pedido = $pedidoModel->find($id);
 
         if (!$pedido) {
-            return redirect()->back()->with('error', 'Pedido não encontrado.');
+            return redirect()->back()->with('error', 'Este pedido não está disponível ou já foi removido.');
         }
 
         $valorAntigo = $pedido['valor'];
@@ -111,7 +122,7 @@ class Pedidos extends Controller
 
         $pedidoModel->update($id, [
             'valor' => $valorNovo,
-            'data_compra' => $data,
+            'data_compra' => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
             'descricao' => $descricao,
         ]);
 
@@ -122,7 +133,7 @@ class Pedidos extends Controller
         $cliente['data_ultima_compra'] = $data;
         $clienteModel->save($cliente);
 
-        return redirect()->to('/clientes/historico/' . $clienteId);
+        return redirect()->to('/clientes/historico/' . $clienteId)->with('success', 'Pedido atualizado com sucesso!');
     }
 
     public function excluir($id)
@@ -131,7 +142,7 @@ class Pedidos extends Controller
         $pedido = $pedidoModel->find($id);
 
         if (!$pedido) {
-            return redirect()->back()->with('error', 'Pedido não encontrado.');
+            return redirect()->back()->with('error', 'Não encontramos esse pedido para excluir.');
         }
 
         $clienteModel = new ClientesModel();
@@ -142,6 +153,6 @@ class Pedidos extends Controller
 
         $pedidoModel->delete($id);
 
-        return redirect()->to('/clientes/historico/' . $cliente['id']);
+        return redirect()->to('/clientes/historico/' . $cliente['id'])->with('success', 'Pedido excluído com sucesso!');
     }
 }

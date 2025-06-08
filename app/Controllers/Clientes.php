@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\ClientesModel;
+use App\Models\ClienteModel;
 use App\Models\ComprasModel;
 use CodeIgniter\Controller;
 
@@ -10,7 +10,7 @@ class Clientes extends Controller
 {
     public function index()
     {
-        $model = new ClientesModel();
+        $model = new ClienteModel();
         $dados['clientes'] = $model->findAll();
         return view('clientes/index', $dados);
     }
@@ -34,7 +34,7 @@ class Clientes extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $model = new ClientesModel();
+        $model = new ClienteModel();
 
         $data = [
             'nome' => $this->request->getPost('nome'),
@@ -58,7 +58,7 @@ class Clientes extends Controller
 
     public function editar($id)
     {
-        $model = new ClientesModel();
+        $model = new ClienteModel();
         $dados['cliente'] = $model->find($id);
 
         if (!$dados['cliente']) {
@@ -82,7 +82,7 @@ class Clientes extends Controller
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $model = new ClientesModel();
+        $model = new ClienteModel();
 
         $data = [
             'id' => $id,
@@ -107,18 +107,21 @@ class Clientes extends Controller
 
     public function excluir($id)
     {
-        $model = new ClientesModel();
+        $model = new ClienteModel();
         $model->delete($id);
         return redirect()->to('/clientes');
     }
 
     public function historico($id)
 {
-    $clienteModel = new ClientesModel();
+    $clienteModel = new ClienteModel();
     $pedidoModel = new \App\Models\PedidosModel();
 
     $cliente = $clienteModel->find($id);
-    $pedidos = $pedidoModel->where('cliente_id', $id)->findAll();
+   $pedidos = $pedidoModel
+    ->where('cliente_id', $id)
+    ->orderBy('data_compra', 'ASC') // ordena do mais antigo ao mais recente
+    ->findAll();
 
     return view('clientes/historico', [
         'cliente' => $cliente,

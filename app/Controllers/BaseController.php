@@ -9,16 +9,6 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class BaseController
- *
- * BaseController provides a convenient place for loading components
- * and performing functions that are needed by all your controllers.
- * Extend this class in any new controllers:
- *     class Home extends BaseController
- *
- * For security be sure to declare any new methods as protected or private.
- */
 abstract class BaseController extends Controller
 {
     /**
@@ -29,30 +19,23 @@ abstract class BaseController extends Controller
     protected $request;
 
     /**
-     * An array of helpers to be loaded automatically upon
-     * class instantiation. These helpers will be available
-     * to all other controllers that extend BaseController.
+     * Helpers a serem carregados automaticamente em todos os controllers.
      *
      * @var list<string>
      */
-    protected $helpers = [];
+    protected $helpers = ['clientes', 'form', 'funcoes'];
 
     /**
-     * Be sure to declare properties for any property fetch you initialized.
-     * The creation of dynamic property is deprecated in PHP 8.2.
-     */
-    // protected $session;
-
-    /**
-     * @return void
+     * Inicializa o controller base.
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
-        // Do Not Edit This Line
+        // Não remova esta linha
         parent::initController($request, $response, $logger);
+        $this->configModel = new \App\Models\ConfigModel();
+        $this->configuracoes = $this->configModel->getConfiguracoes();
 
-        // Preload any models, libraries, etc, here.
-
-        // E.g.: $this->session = service('session');
+        // Carregamentos adicionais (ex: serviços globais)
+        // Exemplo: $this->session = service('session');
     }
 }

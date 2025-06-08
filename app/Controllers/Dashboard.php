@@ -2,33 +2,47 @@
 
 namespace App\Controllers;
 
-use App\Models\ClientesModel;
-use CodeIgniter\Controller;
+use App\Models\ClienteModel;
+use App\Models\ConfigModel;
 
-class Dashboard extends Controller
+class Dashboard extends BaseController
 {
     public function index()
     {
-        $model = new ClientesModel();
+        $clienteModel = new ClienteModel();
+        $configModel = new ConfigModel();
 
-        $totalClientes = $model->countAll();
-        $clientesRecorrentes = $model->where('recorrente', 1)->countAllResults();
-        $totalGasto = $model->selectSum('total_gasto')->first()['total_gasto'] ?? 0;
+        $configuracoes = $configModel->getConfiguracoes();
+        $diasInatividade = (int) ($configuracoes['dias_inatividade'] ?? 60);
+
+        $clientes = $clienteModel->findAll();
+
+        $totalClientes = count($clientes);
+        $clientesRecorrentes = count(array_filter($clientes, fn($c) => $c['recorrente']));
+        $clientesInativos = count(array_filter($clientes, function ($c) use ($diasInatividade) {
+            if (empty($c['data_ultima_compra'])) return true;
+            $dataUltima = new \DateTime($c['data_ultima_compra']);
+            $hoje = new \DateTime();
+            return $dataUltima->diff($hoje)->days > $diasInatividade;
+        }));
+
+        $totalGasto = array_sum(array_column($clientes, 'total_gasto'));
         $ticketMedio = $totalClientes > 0 ? $totalGasto / $totalClientes : 0;
 
-        $cidadeTop = $model
-            ->select('cidade, COUNT(*) as total')
-            ->groupBy('cidade')
-            ->orderBy('total', 'DESC')
-            ->limit(1)
-            ->first()['cidade'] ?? 'Nenhuma';
+        // Cidade com mais clientes
+        $cidades = array_column($clientes, 'cidade');
+        $contagem = array_count_values($cidades);
+        arsort($contagem);
+        $cidadeTop = key($contagem);
 
-        return view('dashboard', [
+        return view('dashboard/index', [
             'totalClientes' => $totalClientes,
             'clientesRecorrentes' => $clientesRecorrentes,
+            'clientesInativos' => $clientesInativos,
             'totalGasto' => $totalGasto,
             'ticketMedio' => $ticketMedio,
             'cidadeTop' => $cidadeTop,
+            'configuracoes' => $configuracoes
         ]);
     }
 }

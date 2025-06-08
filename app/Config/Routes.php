@@ -20,6 +20,9 @@ $routes->get('clientes/historico/(:num)', 'Clientes::historico/$1');
 $routes->get('pedidos/editar/(:num)', 'Pedidos::editar/$1');
 $routes->post('pedidos/atualizar/(:num)', 'Pedidos::atualizar/$1');
 $routes->get('pedidos/excluir/(:num)', 'Pedidos::excluir/$1');
+$routes->get('/configuracoes', 'Configuracoes::index');
+$routes->post('configuracoes/salvar', 'Configuracoes::salvar');
+
 
 
 

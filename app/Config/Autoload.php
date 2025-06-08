@@ -88,5 +88,13 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = [];
+ public $helpers = [
+    'url',
+    'form',
+    'alert',
+    'money',
+    'date',
+    'cliente' // <- ESSENCIAL
+];
+
 }

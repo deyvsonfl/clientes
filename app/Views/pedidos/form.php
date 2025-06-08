@@ -1,50 +1,55 @@
+<?php
+// app/Views/pedidos/form.php
+?>
+
 <?php $this->extend('layouts/main'); ?>
+
 <?php $this->section('content'); ?>
+<div class="container mt-4">
+    <h2><?= isset($pedido) ? 'Editar Pedido' : 'Adicionar Pedido' ?></h2>
 
-<h1><?= isset($pedido) ? 'Editar Pedido' : 'Adicionar Pedido' ?></h1>
-
-<form method="post" action="<?= isset($pedido) ? base_url('pedidos/atualizar/' . $pedido['id']) : base_url('pedidos/salvar') ?>">
-    <?php if (!isset($pedido)): ?>
-        <label for="cliente">Nome do Cliente:</label>
-        <input type="text" name="cliente" id="cliente" value="<?= esc($cliente['nome'] ?? '') ?>" required>
-    <?php else: ?>
-        <p><strong>Cliente:</strong> <?= esc($cliente['nome']) ?></p>
+    <?php if (session()->getFlashdata('errors')): ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach (session()->getFlashdata('errors') as $erro): ?>
+                    <li><?= esc($erro) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     <?php endif; ?>
 
-    <label for="valor">Valor do Pedido:</label>
-    <input type="text" name="valor" id="valor" value="<?= isset($pedido['valor']) ? esc(number_format((float)$pedido['valor'], 2, ',', '.')) : '' ?>" required>
+    <form method="post" action="<?= isset($pedido) ? base_url('pedidos/atualizar/' . $pedido['id']) : base_url('pedidos/salvar') ?>">
+        <div class="mb-3">
+            <label for="cliente" class="form-label">Nome do Cliente:</label>
+            <select name="cliente" id="cliente" class="form-select" required>
+                <option value="">Selecione um cliente</option>
+                <?php foreach ($clientes as $cli): ?>
+                    <option value="<?= esc($cli['nome']) ?>" <?= (isset($cliente) && $cliente['nome'] == $cli['nome']) ? 'selected' : '' ?>>
+                        <?= esc($cli['nome']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <div class="form-text">
+                <a href="<?= base_url('clientes/criar') ?>">Novo cliente? Clique aqui</a>
+            </div>
+        </div>
 
-    <label for="data">Data do Pedido:</label>
-    <input type="date" name="data" id="data" value="<?= esc($pedido['data_compra'] ?? '') ?>" required>
+        <div class="mb-3">
+            <label for="valor" class="form-label">Valor do Pedido:</label>
+            <input type="text" name="valor" id="valor" class="form-control" value="<?= esc($pedido['valor'] ?? '') ?>" required>
+        </div>
 
-    <label for="descricao">Descrição:</label>
-    <textarea name="descricao" id="descricao"><?= esc($pedido['descricao'] ?? '') ?></textarea>
+        <div class="mb-3">
+            <label for="data" class="form-label">Data do Pedido:</label>
+            <input type="date" name="data" id="data" class="form-control" value="<?= esc($pedido['data_compra'] ?? '') ?>" required>
+        </div>
 
-    <br><br>
-    <button type="submit">Salvar</button>
-    <a href="<?= base_url('clientes') ?>">Cancelar</a>
-</form>
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição:</label>
+            <textarea name="descricao" id="descricao" class="form-control"><?= esc($pedido['descricao'] ?? '') ?></textarea>
+        </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/imask/6.4.2/imask.min.js"></script>
-<script>
-    const valorInput = document.getElementById('valor');
-    if (valorInput) {
-        IMask(valorInput, {
-            mask: 'R$ num',
-            blocks: {
-                num: {
-                    // Aceita até 2 casas decimais
-                    mask: Number,
-                    thousandsSeparator: '.',
-                    radix: ',',
-                    mapToRadix: ['.'],
-                    scale: 2,
-                    signed: false
-                }
-            }
-        });
-    }
-</script>
-
-
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
 <?php $this->endSection(); ?>
