@@ -8,6 +8,8 @@ class PedidosModel extends Model
 {
     protected $table = 'pedidos';
     protected $primaryKey = 'id';
+    protected $returnType = 'object';
+
 
     protected $allowedFields = [
         'cliente_id',

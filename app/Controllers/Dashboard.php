@@ -18,10 +18,10 @@ class Dashboard extends BaseController
         $clientes = $clienteModel->findAll();
 
         $totalClientes = count($clientes);
-        $clientesRecorrentes = count(array_filter($clientes, fn($c) => $c['recorrente']));
+        $clientesRecorrentes = count(array_filter($clientes, fn($c) => $c->recorrente));
         $clientesInativos = count(array_filter($clientes, function ($c) use ($diasInatividade) {
-            if (empty($c['data_ultima_compra'])) return true;
-            $dataUltima = new \DateTime($c['data_ultima_compra']);
+            if (empty($c->data_ultima_compra)) return true;
+            $dataUltima = new \DateTime($c->data_ultima_compra);
             $hoje = new \DateTime();
             return $dataUltima->diff($hoje)->days > $diasInatividade;
         }));

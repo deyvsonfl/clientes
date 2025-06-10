@@ -9,8 +9,12 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
+
+
 abstract class BaseController extends Controller
 {
+    protected $configModel;
+    protected $configuracoes;
     /**
      * Instance of the main Request object.
      *
@@ -30,9 +34,10 @@ abstract class BaseController extends Controller
      */
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
+
         // Não remova esta linha
         parent::initController($request, $response, $logger);
-        $this->configModel = new \App\Models\ConfigModel();
+        $this->configModel = model(\App\Models\ConfigModel::class);
         $this->configuracoes = $this->configModel->getConfiguracoes();
 
         // Carregamentos adicionais (ex: serviços globais)

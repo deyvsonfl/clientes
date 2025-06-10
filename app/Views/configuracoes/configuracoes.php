@@ -13,26 +13,26 @@
 
     <div class="col-md-6">
         <label for="nome_sistema" class="form-label">Nome do sistema:</label>
-        <input type="text" class="form-control" name="nome_sistema" id="nome_sistema" 
-               value="<?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?>" required>
+        <input type="text" class="form-control" name="nome_sistema" id="nome_sistema"
+            value="<?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?>" required>
     </div>
 
     <div class="col-md-6">
         <label for="dias_inatividade" class="form-label">Dias sem compra para considerar inativo:</label>
-        <input type="number" class="form-control" name="dias_inatividade" id="dias_inatividade" 
-               value="<?= esc($configuracoes['dias_inatividade'] ?? 60) ?>" min="1" required>
+        <input type="number" class="form-control" name="dias_inatividade" id="dias_inatividade"
+            value="<?= esc($configuracoes['dias_inatividade'] ?? 60) ?>" min="1" required>
     </div>
 
     <div class="col-md-12">
         <label class="form-label">Colunas visíveis na listagem de clientes:</label>
-        <?php 
-            $colunas = explode(',', $configuracoes['mostrar_colunas'] ?? '');
-            $opcoes = ['instagram', 'data_ultima_compra', 'total_gasto', 'status', 'recorrente'];
+        <?php
+        $colunas = explode(',', $configuracoes['mostrar_colunas'] ?? '');
+        $opcoes = ['instagram', 'data_ultima_compra', 'total_gasto', 'status', 'recorrente'];
         ?>
         <div class="form-check">
             <?php foreach ($opcoes as $opcao): ?>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="mostrar_colunas[]" 
+                    <input class="form-check-input" type="checkbox" name="mostrar_colunas[]"
                         value="<?= $opcao ?>" id="col_<?= $opcao ?>"
                         <?= in_array($opcao, $colunas) ? 'checked' : '' ?>>
                     <label class="form-check-label" for="col_<?= $opcao ?>"><?= ucfirst($opcao) ?></label>
@@ -54,11 +54,11 @@
 </form>
 
 <script>
-function confirmarLimpeza() {
-    if (confirm("Tem certeza que deseja apagar todos os dados de teste? Esta ação não poderá ser desfeita.")) {
-        window.location.href = "<?= base_url('/configuracoes/limpar-teste') ?>";
+    function confirmarLimpeza() {
+        if (confirm("Tem certeza que deseja apagar todos os dados de teste? Esta ação não poderá ser desfeita.")) {
+            window.location.href = "<?= base_url('/configuracoes/limpar-teste') ?>";
+        }
     }
-}
 </script>
 
 <?= $this->endSection() ?>

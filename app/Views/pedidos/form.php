@@ -18,14 +18,14 @@
         </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= isset($pedido) ? base_url('pedidos/atualizar/' . $pedido['id']) : base_url('pedidos/salvar') ?>">
+    <form method="post" action="<?= isset($pedido) ? base_url('pedidos/atualizar/' . $pedido->id) : base_url('pedidos/salvar') ?>">
         <div class="mb-3">
             <label for="cliente_id">Cliente</label>
-            <select name="cliente" id="cliente" class="form-select" required>
+            <select name="cliente_id" id="cliente_id" class="form-select" required>
                 <option value="">Selecione um cliente</option>
                 <?php foreach ($clientes as $cli): ?>
-                    <option value="<?= esc($cli['nome']) ?>" <?= (isset($cliente) && $cliente['nome'] == $cli['nome']) ? 'selected' : '' ?>>
-                        <?= esc($cli['nome']) ?>
+                    <option value="<?= esc($cli->id) ?>" <?= old('cliente_id', $pedido->cliente_id ?? '') == $cli->id ? 'selected' : '' ?>>
+                        <?= esc($cli->nome) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -36,17 +36,17 @@
 
         <div class="mb-3">
             <label for="valor" class="form-label">Valor do Pedido:</label>
-            <input type="text" name="valor" id="valor" class="form-control" value="<?= esc($pedido['valor'] ?? '') ?>" required>
+            <input type="text" name="valor" id="valor" class="form-control" value="<?= esc($pedido->valor ?? '') ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="data" class="form-label">Data do Pedido:</label>
-            <input type="date" name="data" id="data" class="form-control" value="<?= esc($pedido['data_compra'] ?? '') ?>" required>
+            <input type="date" name="data" id="data" class="form-control" value="<?= esc($pedido->data_compra ?? '') ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição:</label>
-            <textarea name="descricao" id="descricao" class="form-control"><?= esc($pedido['descricao'] ?? '') ?></textarea>
+            <textarea name="descricao" id="descricao" class="form-control"><?= esc($pedido->descricao ?? '') ?></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>

@@ -2,10 +2,10 @@
 
 <?php $this->section('content'); ?>
 
-<h1>Histórico de Pedidos de <?= esc($cliente['nome']) ?></h1>
+<h1>Histórico de Pedidos de <?= esc($cliente->nome) ?></h1>
 
 <div class="mb-3">
-    <a class="btn btn-primary" href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente['nome'])) ?>">
+    <a class="btn btn-primary" href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente->nome)) ?>">
         ➕ Adicionar Novo Pedido
     </a>
 </div>
@@ -26,12 +26,12 @@
             <tbody>
                 <?php foreach ($pedidos as $pedido): ?>
                     <tr>
-                        <td><?= formatar_data_br($pedido['data_compra']) ?></td>
-                        <td><?= formatar_real($pedido['valor']) ?></td>
-                        <td><?= esc($pedido['descricao']) ?></td>
+                        <td><?= formatar_data_br($pedido->data_compra) ?></td>
+                        <td><?= formatar_real($pedido->valor) ?></td>
+                        <td><?= esc($pedido->descricao) ?></td>
                         <td class="text-center">
-                            <a class="btn btn-sm btn-outline-secondary" href="<?= base_url('pedidos/editar/' . $pedido['id']) ?>">Editar</a>
-                            <a class="btn btn-sm btn-outline-danger" href="<?= base_url('pedidos/excluir/' . $pedido['id']) ?>" onclick="return confirm('Deseja excluir este pedido?')">Excluir</a>
+                            <a class="btn btn-sm btn-outline-secondary" href="<?= base_url('pedidos/editar/' . $pedido->id) ?>">Editar</a>
+                            <a class="btn btn-sm btn-outline-danger" href="<?= base_url('pedidos/excluir/' . $pedido->id) ?>" onclick="return confirm('Deseja excluir este pedido?')">Excluir</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -38,16 +38,24 @@ $mostrarColunas = explode(',', $colunasString);
         </tr>
     </thead>
     <tbody>
+        <form method="get" class="mb-3 row g-2">
+            <div class="col-auto">
+                <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
         <?php foreach ($clientes as $cliente): ?>
             <tr>
-                <td><?= esc($cliente['nome']) ?></td>
-                <td><?= esc($cliente['telefone']) ?></td>
+                <td><?= esc($cliente->nome) ?></td>
+                <td><?= esc($cliente->telefone) ?></td>
                 <?php if (in_array('instagram', $mostrarColunas)): ?>
-                    <td><?= esc($cliente['instagram']) ?></td>
+                    <td><?= esc($cliente->instagram) ?></td>
                 <?php endif; ?>
-                <td><?= esc($cliente['estado']) ?></td>
-                <td><?= esc($cliente['cidade']) ?></td>
-                <td><?= esc($cliente['nicho']) ?></td>
+                <td><?= esc($cliente->estado) ?></td>
+                <td><?= esc($cliente->cidade) ?></td>
+                <td><?= esc($cliente->nicho) ?></td>
                 <?php if (in_array('data_ultima_compra', $mostrarColunas)): ?>
                     <td><?= formatar_data_br($cliente['data_ultima_compra']) ?></td>
                 <?php endif; ?>
@@ -58,13 +66,15 @@ $mostrarColunas = explode(',', $colunasString);
                     <td><?= statusCliente($cliente) ?></td>
                 <?php endif; ?>
                 <?php if (in_array('recorrente', $mostrarColunas)): ?>
-                    <td><?= badge_recorrente($cliente['recorrente']) ?></td>
+                    <td><?= badge_recorrente($cliente->recorrente) ?></td>
                 <?php endif; ?>
                 <td>
-                    <a href="<?= base_url('clientes/editar/' . $cliente['id']) ?>" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="<?= base_url('clientes/excluir/' . $cliente['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
-                    <a href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente['nome'])) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
+                    <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                    <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-info">Painel</a>
+                    <a href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente->nome)) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
                 </td>
+                <?= $pager->links('grupoClientes', 'default_full') ?>
             </tr>
         <?php endforeach; ?>
     </tbody>

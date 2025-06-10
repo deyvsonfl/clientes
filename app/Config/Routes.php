@@ -22,6 +22,7 @@ $routes->post('pedidos/atualizar/(:num)', 'Pedidos::atualizar/$1');
 $routes->get('pedidos/excluir/(:num)', 'Pedidos::excluir/$1');
 $routes->get('/configuracoes', 'Configuracoes::index');
 $routes->post('configuracoes/salvar', 'Configuracoes::salvar');
+$routes->get('clientes/(:num)/painel', 'Clientes::painel/$1');
 
 
 
