@@ -73,11 +73,12 @@ $mostrarColunas = explode(',', $colunasString);
                     <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
                     <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-info">Painel</a>
                     <a href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
+                    <a href="<?= base_url('clientes/historico/' . $cliente->id) ?>" class="btn btn-sm btn-info">Histórico</a>
                 </td>
-                <?= $pager->links('grupoClientes', 'default_full') ?>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+<?= $pager->links('grupoClientes', 'default_full') ?>
 
 <?php $this->endSection(); ?>
