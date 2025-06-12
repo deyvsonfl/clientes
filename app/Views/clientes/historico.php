@@ -5,7 +5,7 @@
 <h1>Histórico de Pedidos de <?= esc($cliente->nome) ?></h1>
 
 <div class="mb-3">
-    <a class="btn btn-primary" href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente->nome)) ?>">
+    <a class="btn btn-primary" href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>">
         ➕ Adicionar Novo Pedido
     </a>
 </div>
