@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\ClienteModel;
-use App\Models\ComprasModel;
 use CodeIgniter\Controller;
 use App\Models\PedidosModel;
 use App\Models\NichoModel;
