@@ -37,4 +37,45 @@
     </a>
 </div>
 
+<hr class="my-4">
+
+<h4>📦 Histórico de Pedidos</h4>
+
+<div class="mb-3">
+    <a class="btn btn-sm btn-primary" href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>">
+        ➕ Novo Pedido
+    </a>
+</div>
+
+<?php if (empty($pedidos)): ?>
+    <div class="alert alert-info">Este cliente ainda não possui pedidos registrados.</div>
+<?php else: ?>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Descrição</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($pedidos as $pedido): ?>
+                    <tr>
+                        <td><?= formatar_data_br($pedido->data_compra) ?></td>
+                        <td><?= formatar_real($pedido->valor) ?></td>
+                        <td><?= esc($pedido->descricao) ?></td>
+                        <td class="text-center">
+                            <a href="<?= base_url('pedidos/editar/' . $pedido->id) ?>" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            <a href="<?= base_url('pedidos/excluir/' . $pedido->id) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este pedido?')">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
+
+
 <?= $this->endSection() ?>

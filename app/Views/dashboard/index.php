@@ -46,7 +46,7 @@
         <div class="col">
             <div class="card border-info shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title">Cidade com Mais Clientes</h5>
+                    <h5 class="card-title">Cidade com mais Clientes</h5>
                     <p class="card-text fs-4 fw-bold"><?= esc($cidadeTop) ?></p>
                 </div>
             </div>

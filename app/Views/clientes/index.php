@@ -69,11 +69,10 @@ $mostrarColunas = explode(',', $colunasString);
                     <td><?= badge_recorrente($cliente->recorrente) ?></td>
                 <?php endif; ?>
                 <td>
-                    <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
                     <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-info">Painel</a>
                     <a href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
-                    <a href="<?= base_url('clientes/historico/' . $cliente->id) ?>" class="btn btn-sm btn-info">Histórico</a>
+                    <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
                 </td>
             </tr>
         <?php endforeach; ?>

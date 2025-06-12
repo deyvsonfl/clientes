@@ -167,25 +167,30 @@ class Clientes extends Controller
         $clienteModel = new ClienteModel();
         $pedidoModel  = new PedidosModel();
 
-        // Carrega o cliente
         $cliente = $clienteModel->find($id);
         if (! $cliente) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Cliente #{$id} não encontrado");
         }
 
-        // Estatísticas básicas
-        $totalPedidos   = $pedidoModel->where('cliente_id', $id)->countAllResults();
+        // Estatísticas
+        $totalPedidos = $pedidoModel->where('cliente_id', $id)->countAllResults();
         $somaTotal = $pedidoModel
             ->selectSum('valor', 'total_gasto')
             ->where('cliente_id', $id)
             ->first()->total_gasto ?? 0;
-        $valorMedio     = $totalPedidos
+        $valorMedio = $totalPedidos
             ? round($somaTotal / $totalPedidos, 2)
             : 0;
-        $ultimaCompra   = $pedidoModel
+        $ultimaCompra = $pedidoModel
             ->where('cliente_id', $id)
             ->orderBy('data_compra', 'DESC')
             ->first()->data_compra ?? null;
+
+        // 👇 AQUI: carregando todos os pedidos
+        $pedidos = $pedidoModel
+            ->where('cliente_id', $id)
+            ->orderBy('data_compra', 'DESC')
+            ->findAll();
 
         return view('clientes/painel', [
             'cliente'      => $cliente,
@@ -193,6 +198,7 @@ class Clientes extends Controller
             'somaTotal'    => $somaTotal,
             'valorMedio'   => $valorMedio,
             'ultimaCompra' => $ultimaCompra,
+            'pedidos'      => $pedidos // 👈 ESSENCIAL PRA FUNCIONAR A TABELA
         ]);
     }
 }
