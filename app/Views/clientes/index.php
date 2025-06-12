@@ -57,10 +57,10 @@ $mostrarColunas = explode(',', $colunasString);
                 <td><?= esc($cliente->cidade) ?></td>
                 <td><?= esc($cliente->nicho) ?></td>
                 <?php if (in_array('data_ultima_compra', $mostrarColunas)): ?>
-                    <td><?= formatar_data_br($cliente['data_ultima_compra']) ?></td>
+                    <td><?= formatar_data_br($cliente->data_ultima_compra) ?></td>
                 <?php endif; ?>
                 <?php if (in_array('total_gasto', $mostrarColunas)): ?>
-                    <td><?= formatar_real($cliente['total_gasto']) ?></td>
+                    <td><?= formatar_real($cliente->total_gasto) ?></td>
                 <?php endif; ?>
                 <?php if (in_array('status', $mostrarColunas)): ?>
                     <td><?= statusCliente($cliente) ?></td>
