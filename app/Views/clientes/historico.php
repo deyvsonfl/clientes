@@ -6,13 +6,39 @@
 
 <div class="mb-3">
     <a class="btn btn-primary" href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>">
-        Adicionar Novo Pedido
+        ➕ Adicionar Novo Pedido
     </a>
 </div>
 
 <?php if (empty($pedidos)): ?>
     <div class="alert alert-info">Nenhum pedido registrado ainda.</div>
 <?php else: ?>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label for="data_inicio">Data Inicial</label>
+            <input type="date" id="data_inicio" name="data_inicio" value="<?= esc($filtros['data_inicio'] ?? '') ?>" class="form-control">
+        </div>
+        <div class="col-md-3">
+            <label for="data_fim">Data Final</label>
+            <input type="date" id="data_fim" name="data_fim" value="<?= esc($filtros['data_fim'] ?? '') ?>" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label for="valor_min">Valor Mínimo</label>
+            <input type="number" id="valor_min" name="valor_min" step="0.01" value="<?= esc($filtros['valor_min'] ?? '') ?>" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label for="valor_max">Valor Máximo</label>
+            <input type="number" id="valor_max" name="valor_max" step="0.01" value="<?= esc($filtros['valor_max'] ?? '') ?>" class="form-control">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-primary w-100">🔍 Filtrar</button>
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+            <a href="<?= current_url() ?>" class="btn btn-outline-secondary w-100">⟳ Limpar</a>
+        </div>
+    </form>
+
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
             <thead class="table-light">

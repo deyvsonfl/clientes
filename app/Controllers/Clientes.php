@@ -151,16 +151,37 @@ class Clientes extends Controller
         $pedidoModel = new \App\Models\PedidosModel();
 
         $cliente = $clienteModel->find($id);
-        $pedidos = $pedidoModel
-            ->where('cliente_id', $id)
-            ->orderBy('data_compra', 'ASC') // ordena do mais antigo ao mais recente
+        $filtros = $this->request->getGet();
+
+        $builder = $pedidoModel->where('cliente_id', $id);
+
+        if (!empty($filtros['data_inicio'])) {
+            $builder->where('data_compra >=', $filtros['data_inicio']);
+        }
+
+        if (!empty($filtros['data_fim'])) {
+            $builder->where('data_compra <=', $filtros['data_fim']);
+        }
+
+        if (!empty($filtros['valor_min'])) {
+            $builder->where('valor >=', $filtros['valor_min']);
+        }
+
+        if (!empty($filtros['valor_max'])) {
+            $builder->where('valor <=', $filtros['valor_max']);
+        }
+
+        $pedidos = $builder
+            ->orderBy('data_compra', 'ASC') // mantém ordenação antiga
             ->findAll();
 
         return view('clientes/historico', [
             'cliente' => $cliente,
-            'pedidos' => $pedidos
+            'pedidos' => $pedidos,
+            'filtros' => $filtros,
         ]);
     }
+
 
     public function painel($id)
     {
@@ -178,19 +199,33 @@ class Clientes extends Controller
             ->selectSum('valor', 'total_gasto')
             ->where('cliente_id', $id)
             ->first()->total_gasto ?? 0;
-        $valorMedio = $totalPedidos
-            ? round($somaTotal / $totalPedidos, 2)
-            : 0;
+        $valorMedio = $totalPedidos ? round($somaTotal / $totalPedidos, 2) : 0;
         $ultimaCompra = $pedidoModel
             ->where('cliente_id', $id)
             ->orderBy('data_compra', 'DESC')
             ->first()->data_compra ?? null;
 
-        // 👇 AQUI: carregando todos os pedidos
-        $pedidos = $pedidoModel
-            ->where('cliente_id', $id)
-            ->orderBy('data_compra', 'DESC')
-            ->findAll();
+        // Filtros
+        $filtros = $this->request->getGet();
+        $builder = $pedidoModel->where('cliente_id', $id);
+
+        if (!empty($filtros['data_inicio'])) {
+            $builder->where('data_compra >=', $filtros['data_inicio']);
+        }
+
+        if (!empty($filtros['data_fim'])) {
+            $builder->where('data_compra <=', $filtros['data_fim']);
+        }
+
+        if (!empty($filtros['valor_min'])) {
+            $builder->where('valor >=', $filtros['valor_min']);
+        }
+
+        if (!empty($filtros['valor_max'])) {
+            $builder->where('valor <=', $filtros['valor_max']);
+        }
+
+        $pedidos = $builder->orderBy('data_compra', 'DESC')->findAll();
 
         return view('clientes/painel', [
             'cliente'      => $cliente,
@@ -198,7 +233,8 @@ class Clientes extends Controller
             'somaTotal'    => $somaTotal,
             'valorMedio'   => $valorMedio,
             'ultimaCompra' => $ultimaCompra,
-            'pedidos'      => $pedidos // 👈 ESSENCIAL PRA FUNCIONAR A TABELA
+            'pedidos'      => $pedidos,
+            'filtros'      => $filtros,
         ]);
     }
 }
