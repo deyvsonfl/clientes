@@ -32,6 +32,7 @@ class Pedidos extends Controller
         $valor     = (float) $this->request->getPost('valor');
         $data      = $this->request->getPost('data');
         $descricao = $this->request->getPost('descricao');
+        $status    = $this->request->getPost('status');
 
         $erros = [];
 
@@ -55,6 +56,7 @@ class Pedidos extends Controller
             'valor'       => $valor,
             'data_compra' => $data,
             'descricao'   => $descricao,
+            'status'      => $status,
         ]);
 
         // Atualiza os dados do cliente usando a Entity
@@ -103,6 +105,7 @@ class Pedidos extends Controller
         $valorNovo   = (float) $this->request->getPost('valor');
         $data        = $this->request->getPost('data');
         $descricao   = $this->request->getPost('descricao');
+        $status      = $this->request->getPost('status');
 
         $erros = [];
 
@@ -121,6 +124,7 @@ class Pedidos extends Controller
             'valor'       => $valorNovo,
             'data_compra' => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
             'descricao'   => $descricao,
+            'status'      => $status,
         ]);
 
         $clienteModel = new ClienteModel();
