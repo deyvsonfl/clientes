@@ -1,0 +1,7 @@
+# Ignore runtime files
+writable/debugbar/
+writable/cache/
+writable/session/
+writable/logs/log-*.log
+/vendor/
+/public/writable/
