@@ -12,6 +12,7 @@ if (!isset($configuracoes)) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title><?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?></title>
@@ -27,20 +28,38 @@ if (!isset($configuracoes)) {
         body {
             background-color: #f8f9fa;
         }
+
         .sidebar {
             min-height: 100vh;
             border-right: 1px solid #dee2e6;
         }
+
         .nav-link {
             font-weight: 500;
+            color: #333;
         }
+
         .nav-link:hover,
         .nav-link.active {
             background-color: #e9ecef;
             border-radius: .375rem;
+            color: #000;
+        }
+
+        .nav-link i {
+            margin-right: .5rem;
+        }
+
+        .sidebar hr {
+            margin: 1rem 0;
+        }
+
+        main {
+            min-height: 100vh;
         }
     </style>
 </head>
+
 <body>
 
     <!-- Flash messages -->
@@ -52,10 +71,11 @@ if (!isset($configuracoes)) {
             <!-- Sidebar -->
             <nav class="col-md-2 d-none d-md-block bg-light sidebar py-4">
                 <div class="position-sticky">
+                    <h5 class="px-3 mb-3 text-secondary"><?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?></h5>
                     <ul class="nav flex-column px-2">
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('dashboard') ? 'active' : '' ?>" href="<?= base_url('/dashboard') ?>">
-                            <i class="bi bi-graph-up"></i> Dashboard
+                                <i class="bi bi-graph-up"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
@@ -71,7 +91,7 @@ if (!isset($configuracoes)) {
                         <hr>
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('configuracoes') ? 'active' : '' ?>" href="<?= base_url('/configuracoes') ?>">
-                                ⚙️ Configurações
+                                <i class="bi bi-gear-fill"></i> Configurações
                             </a>
                         </li>
                     </ul>
@@ -89,4 +109,5 @@ if (!isset($configuracoes)) {
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
