@@ -12,6 +12,7 @@ if (!isset($configuracoes)) {
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <title><?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?></title>
@@ -27,13 +28,18 @@ if (!isset($configuracoes)) {
         body {
             background-color: #f8f9fa;
         }
+
         .sidebar {
             min-height: 100vh;
             border-right: 1px solid #dee2e6;
+            background-color: #fdfdfd;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);
         }
+
         .nav-link {
             font-weight: 500;
         }
+
         .nav-link:hover,
         .nav-link.active {
             background-color: #e9ecef;
@@ -41,7 +47,18 @@ if (!isset($configuracoes)) {
         }
     </style>
 </head>
+
 <body>
+
+    <!-- Cabeçalho fixo -->
+    <nav class="navbar navbar-light bg-white border-bottom px-4 py-2 sticky-top shadow-sm">
+        <span class="navbar-brand mb-0 h5"><?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?></span>
+        <div class="d-flex">
+            <a href="<?= base_url('/logout') ?>" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-box-arrow-right"></i> Sair
+            </a>
+        </div>
+    </nav>
 
     <!-- Flash messages -->
     <?= view('partials/messages') ?>
@@ -50,12 +67,12 @@ if (!isset($configuracoes)) {
         <div class="row">
 
             <!-- Sidebar -->
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar py-4">
+            <nav class="col-md-2 d-none d-md-block sidebar py-4">
                 <div class="position-sticky">
                     <ul class="nav flex-column px-2">
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('dashboard') ? 'active' : '' ?>" href="<?= base_url('/dashboard') ?>">
-                            <i class="bi bi-graph-up"></i> Dashboard
+                                <i class="bi bi-graph-up"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
@@ -79,7 +96,7 @@ if (!isset($configuracoes)) {
             </nav>
 
             <!-- Conteúdo principal -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <main class="col-md-9 ms-sm-auto col-lg-10 p-4">
                 <?= $this->renderSection('content') ?>
             </main>
 
@@ -89,4 +106,5 @@ if (!isset($configuracoes)) {
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
