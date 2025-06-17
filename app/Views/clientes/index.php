@@ -14,8 +14,8 @@ $mostrarColunas = explode(',', $colunasString);
     </a>
 </div>
 
-<form method="get" class="row g-2 mb-4">
-    <div class="col-md-4">
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
         <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
     </div>
     <div class="col-auto">
@@ -95,8 +95,9 @@ $mostrarColunas = explode(',', $colunasString);
             <?php endforeach; ?>
         </tbody>
     </table>
+    <?= $pager->links('grupoClientes', 'default_full') ?>
 </div>
 
-<?= $pager->links('grupoClientes', 'default_full') ?>
+
 
 <?php $this->endSection(); ?>
