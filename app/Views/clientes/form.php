@@ -1,7 +1,9 @@
 <?php $this->extend('layouts/main'); ?>
 <?php $this->section('content'); ?>
 
-<h1><?= isset($cliente) ? 'Editar Cliente' : 'Novo Cliente' ?></h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 mb-0"><?= isset($cliente) ? 'Editar Cliente' : 'Novo Cliente' ?></h1>
+</div>
 
 <?php if (session()->getFlashdata('errors')): ?>
     <div class="alert alert-danger">
@@ -14,68 +16,71 @@
 <?php endif; ?>
 
 <form method="post" action="<?= isset($cliente) ? base_url('clientes/atualizar/' . $cliente->id) : base_url('clientes/salvar') ?>">
-    <div class="row g-3">
+    <div class="row g-4">
         <div class="col-md-6">
-            <label for="nome" class="form-label">Nome:</label>
+            <label for="nome" class="form-label">Nome</label>
             <input type="text" class="form-control" name="nome" id="nome" value="<?= old('nome', $cliente->nome ?? '') ?>" required>
         </div>
 
         <div class="col-md-6">
-            <label for="telefone" class="form-label">Telefone:</label>
+            <label for="telefone" class="form-label">Telefone</label>
             <input type="text" class="form-control" name="telefone" id="telefone" value="<?= old('telefone', $cliente->telefone ?? '') ?>" required>
         </div>
 
         <div class="col-md-6">
-            <label for="instagram" class="form-label">Instagram:</label>
+            <label for="instagram" class="form-label">Instagram</label>
             <input type="text" class="form-control" name="instagram" id="instagram" value="<?= old('instagram', $cliente->instagram ?? '') ?>">
         </div>
 
         <div class="col-md-6">
-            <label for="cep" class="form-label">CEP:</label>
+            <label for="cep" class="form-label">CEP</label>
             <input type="text" class="form-control" name="cep" id="cep" value="<?= old('cep', $cliente->cep ?? '') ?>">
         </div>
 
         <div class="col-md-4">
-            <label for="estado" class="form-label">Estado:</label>
+            <label for="estado" class="form-label">Estado</label>
             <input type="text" class="form-control" name="estado" id="estado" value="<?= old('estado', $cliente->estado ?? '') ?>">
         </div>
 
         <div class="col-md-4">
-            <label for="cidade" class="form-label">Cidade:</label>
+            <label for="cidade" class="form-label">Cidade</label>
             <input type="text" class="form-control" name="cidade" id="cidade" value="<?= old('cidade', $cliente->cidade ?? '') ?>">
         </div>
 
         <div class="col-md-4">
-            <label for="bairro" class="form-label">Bairro:</label>
+            <label for="bairro" class="form-label">Bairro</label>
             <input type="text" class="form-control" name="bairro" id="bairro" value="<?= old('bairro', $cliente->bairro ?? '') ?>">
         </div>
 
         <div class="col-md-12">
-            <label for="endereco" class="form-label">Endereço:</label>
+            <label for="endereco" class="form-label">Endereço</label>
             <input type="text" class="form-control" name="endereco" id="endereco" value="<?= old('endereco', $cliente->endereco ?? '') ?>">
         </div>
 
         <div class="col-md-6">
-            <label for="nicho" class="form-label">Nicho de atuação:</label>
+            <label for="nicho" class="form-label">Nicho de Atuação</label>
             <select class="form-select" name="nicho" id="nicho" required>
                 <option value="">Selecione um nicho</option>
                 <?php foreach ($nichos as $n): ?>
                     <option value="<?= esc($n['nome']) ?>" <?= old('nicho', $cliente->nicho ?? '') === $n['nome'] ? 'selected' : '' ?>>
                         <?= esc($n['nome']) ?>
                     </option>
-
                 <?php endforeach; ?>
             </select>
         </div>
 
         <div class="col-md-6">
-            <label for="total_gasto" class="form-label">Valor Inicial (se houver):</label>
+            <label for="total_gasto" class="form-label">Valor Inicial (se houver)</label>
             <input type="number" step="0.01" class="form-control" name="total_gasto" id="total_gasto" value="<?= old('total_gasto', $cliente->total_gasto ?? '') ?>">
         </div>
 
-        <div class="col-12">
-            <button type="submit" class="btn btn-success">Salvar</button>
-            <a href="<?= base_url('clientes') ?>" class="btn btn-secondary">Cancelar</a>
+        <div class="col-12 d-flex justify-content-end">
+            <button type="submit" class="btn btn-success me-2">
+                <i class="bi bi-save me-1"></i> Salvar
+            </button>
+            <a href="<?= base_url('clientes') ?>" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Cancelar
+            </a>
         </div>
     </div>
 </form>

@@ -21,7 +21,7 @@ if (!isset($configuracoes)) {
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -62,8 +62,13 @@ if (!isset($configuracoes)) {
 
 <body>
 
-    <!-- Flash messages -->
+    <script>
+        console.log('🔵 Antes do Flash Messages');
+    </script>
     <?= view('partials/messages') ?>
+    <script>
+        console.log('🟢 Depois do Flash Messages');
+    </script>
 
     <div class="container-fluid">
         <div class="row">
@@ -106,8 +111,26 @@ if (!isset($configuracoes)) {
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Debug e Bootstrap JS -->
+    <script>
+        console.log('🟡 Carregando Bootstrap Bundle...');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        onload="console.log('🟢 Bootstrap Bundle carregado com sucesso!')"
+        onerror="console.error('🔴 Erro ao carregar Bootstrap Bundle')">
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("✅ DOM totalmente carregado (main.php)");
+            const dropdown = document.querySelector('.dropdown-toggle');
+            if (dropdown) {
+                console.log("✅ Dropdown encontrado (main.php)");
+            } else {
+                console.warn("⚠️ Nenhum dropdown encontrado (main.php)");
+            }
+        });
+    </script>
 </body>
 
 </html>

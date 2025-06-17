@@ -7,77 +7,96 @@ $colunasString = is_array($colunasRaw) ? implode(',', $colunasRaw) : $colunasRaw
 $mostrarColunas = explode(',', $colunasString);
 ?>
 
-<h1>Lista de Clientes</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h4 mb-0">Lista de Clientes</h1>
+    <a href="<?= base_url('/clientes/criar') ?>" class="btn btn-primary">
+        <i class="bi bi-person-plus-fill"></i> Adicionar Cliente
+    </a>
+</div>
 
-<a href="<?= base_url('/clientes/criar') ?>" class="btn btn-primary mb-3">➕ Adicionar Cliente</a>
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </div>
+</form>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <?php if (in_array('instagram', $mostrarColunas)): ?>
-                <th>Instagram</th>
-            <?php endif; ?>
-            <th>Estado</th>
-            <th>Cidade</th>
-            <th>Nicho</th>
-            <?php if (in_array('data_ultima_compra', $mostrarColunas)): ?>
-                <th>Última Compra</th>
-            <?php endif; ?>
-            <?php if (in_array('total_gasto', $mostrarColunas)): ?>
-                <th>Total Gasto</th>
-            <?php endif; ?>
-            <?php if (in_array('status', $mostrarColunas)): ?>
-                <th>Status</th>
-            <?php endif; ?>
-            <?php if (in_array('recorrente', $mostrarColunas)): ?>
-                <th>Recorrente</th>
-            <?php endif; ?>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <form method="get" class="mb-3 row g-2">
-            <div class="col-auto">
-                <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
-        <?php foreach ($clientes as $cliente): ?>
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
             <tr>
-                <td><?= esc($cliente->nome) ?></td>
-                <td><?= esc($cliente->telefone) ?></td>
+                <th>Nome</th>
+                <th>Telefone</th>
                 <?php if (in_array('instagram', $mostrarColunas)): ?>
-                    <td><?= esc($cliente->instagram) ?></td>
+                    <th>Instagram</th>
                 <?php endif; ?>
-                <td><?= esc($cliente->estado) ?></td>
-                <td><?= esc($cliente->cidade) ?></td>
-                <td><?= esc($cliente->nicho) ?></td>
+                <th>Estado</th>
+                <th>Cidade</th>
+                <th>Nicho</th>
                 <?php if (in_array('data_ultima_compra', $mostrarColunas)): ?>
-                    <td><?= formatar_data_br($cliente->data_ultima_compra) ?></td>
+                    <th>Última Compra</th>
                 <?php endif; ?>
                 <?php if (in_array('total_gasto', $mostrarColunas)): ?>
-                    <td><?= formatar_real($cliente->total_gasto) ?></td>
+                    <th>Total Gasto</th>
                 <?php endif; ?>
                 <?php if (in_array('status', $mostrarColunas)): ?>
-                    <td><?= statusCliente($cliente) ?></td>
+                    <th>Status</th>
                 <?php endif; ?>
                 <?php if (in_array('recorrente', $mostrarColunas)): ?>
-                    <td><?= badge_recorrente($cliente->recorrente) ?></td>
+                    <th>Recorrente</th>
                 <?php endif; ?>
-                <td>
-                    <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-info">Painel</a>
-                    <a href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
-                    <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
-                </td>
+                <th>Ações</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($clientes as $cliente): ?>
+                <tr>
+                    <td><?= esc($cliente->nome) ?></td>
+                    <td><?= esc($cliente->telefone) ?></td>
+                    <?php if (in_array('instagram', $mostrarColunas)): ?>
+                        <td><?= esc($cliente->instagram) ?></td>
+                    <?php endif; ?>
+                    <td><?= esc($cliente->estado) ?></td>
+                    <td><?= esc($cliente->cidade) ?></td>
+                    <td><?= esc($cliente->nicho) ?></td>
+                    <?php if (in_array('data_ultima_compra', $mostrarColunas)): ?>
+                        <td><?= formatar_data_br($cliente->data_ultima_compra) ?></td>
+                    <?php endif; ?>
+                    <?php if (in_array('total_gasto', $mostrarColunas)): ?>
+                        <td><?= formatar_real($cliente->total_gasto) ?></td>
+                    <?php endif; ?>
+                    <?php if (in_array('status', $mostrarColunas)): ?>
+                        <td><?= statusCliente($cliente) ?></td>
+                    <?php endif; ?>
+                    <?php if (in_array('recorrente', $mostrarColunas)): ?>
+                        <td><?= badge_recorrente($cliente->recorrente) ?></td>
+                    <?php endif; ?>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-outline-info" title="Painel">
+                                <i class="bi bi-person-lines-fill"></i>
+                            </a>
+                            <a href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>" class="btn btn-sm btn-outline-success" title="Novo Pedido">
+                                <i class="bi bi-cart-plus"></i>
+                            </a>
+                            <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-outline-warning" title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
 <?= $pager->links('grupoClientes', 'default_full') ?>
 
 <?php $this->endSection(); ?>
