@@ -29,7 +29,8 @@ class Clientes extends Controller
             'clientes'    => $clientes,
             'pager'       => $pager,
             'buscar'      => $buscar,
-            'mostrarColunas' => [], // seu array de colunas
+            // Column visibility is configured within the view
+            'mostrarColunas' => [],
         ]);
     }
     public function criar()

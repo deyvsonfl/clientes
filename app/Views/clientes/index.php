@@ -11,6 +11,15 @@ $mostrarColunas = explode(',', $colunasString);
 
 <a href="<?= base_url('/clientes/criar') ?>" class="btn btn-primary mb-3">➕ Adicionar Cliente</a>
 
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary">Buscar</button>
+    </div>
+</form>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -38,14 +47,6 @@ $mostrarColunas = explode(',', $colunasString);
         </tr>
     </thead>
     <tbody>
-        <form method="get" class="mb-3 row g-2">
-            <div class="col-auto">
-                <input type="text" name="q" class="form-control" placeholder="Buscar cliente..." value="<?= esc($buscar) ?>">
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
         <?php foreach ($clientes as $cliente): ?>
             <tr>
                 <td><?= esc($cliente->nome) ?></td>
@@ -72,12 +73,12 @@ $mostrarColunas = explode(',', $colunasString);
                     <a href="<?= base_url('clientes/editar/' . $cliente->id) ?>" class="btn btn-sm btn-warning">Editar</a>
                     <a href="<?= base_url('clientes/excluir/' . $cliente->id) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
                     <a href="<?= base_url("/clientes/{$cliente->id}/painel") ?>" class="btn btn-sm btn-info">Painel</a>
-                    <a href="<?= base_url('pedidos/adicionar?cliente=' . urlencode($cliente->nome)) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
+                    <a href="<?= base_url('pedidos/adicionar?cliente_id=' . $cliente->id) ?>" class="btn btn-sm btn-success">Novo Pedido</a>
                 </td>
-                <?= $pager->links('grupoClientes', 'default_full') ?>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+<?= $pager->links('grupoClientes', 'default_full') ?>
 
 <?php $this->endSection(); ?>

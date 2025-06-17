@@ -49,6 +49,11 @@
             <textarea name="descricao" id="descricao" class="form-control"><?= esc($pedido->descricao ?? '') ?></textarea>
         </div>
 
+        <div class="mb-3">
+            <label for="status" class="form-label">Status:</label>
+            <input type="text" name="status" id="status" class="form-control" value="<?= esc($pedido->status ?? '') ?>">
+        </div>
+
         <button type="submit" class="btn btn-primary">Salvar</button>
     </form>
 </div>
