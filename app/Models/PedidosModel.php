@@ -16,6 +16,7 @@ class PedidosModel extends Model
         'data_compra',
         'valor',
         'descricao',
+        'status',
     ];
 
     protected array $casts = [

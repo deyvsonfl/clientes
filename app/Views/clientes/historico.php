@@ -20,6 +20,7 @@
                     <th>Data</th>
                     <th>Valor</th>
                     <th>Descrição</th>
+                    <th>Status</th>
                     <th class="text-center">Ações</th>
                 </tr>
             </thead>
@@ -29,6 +30,7 @@
                         <td><?= formatar_data_br($pedido->data_compra) ?></td>
                         <td><?= formatar_real($pedido->valor) ?></td>
                         <td><?= esc($pedido->descricao) ?></td>
+                        <td><?= esc($pedido->status) ?></td>
                         <td class="text-center">
                             <a class="btn btn-sm btn-outline-secondary" href="<?= base_url('pedidos/editar/' . $pedido->id) ?>">Editar</a>
                             <a class="btn btn-sm btn-outline-danger" href="<?= base_url('pedidos/excluir/' . $pedido->id) ?>" onclick="return confirm('Deseja excluir este pedido?')">Excluir</a>
