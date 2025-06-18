@@ -25,14 +25,54 @@
 
 <body class="bg-light">
   <div class="container-xl py-4">
-    <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap gap-3 justify-content-between align-items-center mb-4">
       <h1 class="h3 fw-semibold mb-0"><i class="bi bi-card-checklist me-2"></i>Pedidos</h1>
-      <form class="d-flex" method="get" action="">
-        <div class="input-group">
-          <input class="form-control" type="search" name="q" placeholder="Buscar por cliente ou descrição…">
-          <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-        </div>
-      </form>
+      <div class="d-flex gap-2">
+        <a href="<?= site_url('/') ?>" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+        <form class="d-flex" method="get" action="">
+          <div class="input-group">
+            <input class="form-control" type="search" name="q" placeholder="Buscar por cliente ou descrição…">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mb-3 border-0">
+      <div class="card-body py-3">
+        <form class="row row-cols-lg-auto g-2 align-items-end" method="get">
+          <div class="col">
+            <label for="status" class="form-label mb-0">Status</label>
+            <select class="form-select" id="status" name="status">
+              <option value="">Todos</option>
+              <option value="em_aberto" <?= ($status ?? '') === 'em_aberto' ? 'selected' : '' ?>>Em aberto</option>
+              <option value="em_producao" <?= ($status ?? '') === 'em_producao' ? 'selected' : '' ?>>Em produção</option>
+              <option value="entregue" <?= ($status ?? '') === 'entregue' ? 'selected' : '' ?>>Entregue</option>
+              <option value="cancelado" <?= ($status ?? '') === 'cancelado' ? 'selected' : '' ?>>Cancelado</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="forma_pagamento" class="form-label mb-0">Pagamento</label>
+            <select class="form-select" id="forma_pagamento" name="forma_pagamento">
+              <option value="">Todos</option>
+              <option value="pix" <?= ($forma_pagamento ?? '') === 'pix' ? 'selected' : '' ?>>Pix</option>
+              <option value="boleto" <?= ($forma_pagamento ?? '') === 'boleto' ? 'selected' : '' ?>>Boleto</option>
+              <option value="cartao" <?= ($forma_pagamento ?? '') === 'cartao' ? 'selected' : '' ?>>Cartão</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="q" class="form-label mb-0">Busca</label>
+            <input type="search" name="q" id="q" value="<?= esc($q ?? '') ?>" class="form-control" placeholder="Cliente ou descrição…">
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-filter"></i> Filtrar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4">

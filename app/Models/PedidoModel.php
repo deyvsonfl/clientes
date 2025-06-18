@@ -34,6 +34,7 @@ class PedidoModel extends Model
         'forma_pagamento',
         'data_entrega',
         'total',
+        'data_compra',
     ];
 
     /** @var array Tipos de cast automáticos */
@@ -49,11 +50,12 @@ class PedidoModel extends Model
      * Retorna todos os pedidos já com o nome do cliente.
      * Ideal para a listagem /pedidos.
      */
-    public function getPedidosComClientes(): array
+    public function getPedidosComClientes($clienteId): array
     {
         return $this
             ->select('pedidos.*, clientes.nome AS cliente')
             ->join('clientes', 'clientes.id = pedidos.cliente_id')
+            ->where('pedidos.cliente_id', $clienteId)
             ->orderBy('pedidos.created_at', 'DESC')
             ->findAll();
     }

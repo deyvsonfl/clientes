@@ -35,23 +35,36 @@
         </div>
 
         <div class="mb-3">
-            <label for="valor" class="form-label">Valor do Pedido:</label>
-            <input type="text" name="valor" id="valor" class="form-control" value="<?= esc($pedido->valor ?? '') ?>" required>
+            <label for="total" class="form-label">Valor do Pedido:</label>
+            <input type="text" name="total" id="total" class="form-control" value="<?= old('total', $pedido->total ?? '') ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="data" class="form-label">Data do Pedido:</label>
-            <input type="date" name="data" id="data" class="form-control" value="<?= esc($pedido->data_compra ?? '') ?>" required>
+            <?php
+            $dataPedido = isset($pedido->data_compra) ? date('Y-m-d', strtotime($pedido->data_compra)) : '';
+            ?>
+            <input type="date" name="data" id="data" class="form-control" value="<?= old('data', $dataPedido) ?>" required>
         </div>
 
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição:</label>
-            <textarea name="descricao" id="descricao" class="form-control"><?= esc($pedido->descricao ?? '') ?></textarea>
+            <textarea name="descricao" id="descricao" class="form-control"><?= old('descricao', $pedido->descricao ?? '') ?></textarea>
         </div>
 
         <div class="mb-3">
-            <label for="status" class="form-label">Status:</label>
-            <input type="text" name="status" id="status" class="form-control" value="<?= esc($pedido->status ?? '') ?>">
+            <label for="status" class="form-label">Status do Pedido:</label>
+            <select name="status" id="status" class="form-select" required>
+                <?php
+                $statusOptions = ['aberto', 'em produção', 'entregue', 'cancelado'];
+                $statusAtual = old('status', $pedido->status ?? '');
+                foreach ($statusOptions as $opcao):
+                ?>
+                    <option value="<?= esc($opcao) ?>" <?= $statusAtual === $opcao ? 'selected' : '' ?>>
+                        <?= ucfirst($opcao) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>

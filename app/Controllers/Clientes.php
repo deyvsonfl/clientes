@@ -136,13 +136,10 @@ class Clientes extends Controller
     public function historico($id)
     {
         $clienteModel = new ClienteModel();
-        $pedidoModel = new \App\Models\PedidosModel();
+        $pedidoModel = new \App\Models\PedidoModel();
 
         $cliente = $clienteModel->find($id);
-        $pedidos = $pedidoModel
-            ->where('cliente_id', $id)
-            ->orderBy('data_compra', 'ASC') // ordena do mais antigo ao mais recente
-            ->findAll();
+        $pedidos = $pedidoModel->getPedidosComClientes($id); // <- novo método
 
         return view('clientes/historico', [
             'cliente' => $cliente,
@@ -153,19 +150,14 @@ class Clientes extends Controller
     public function painel($id)
     {
         $clienteModel = new ClienteModel();
-        $pedidoModel  = new PedidosModel();
+        $pedidoModel  = new \App\Models\PedidoModel();
 
-        // Busca o cliente
         $cliente = $clienteModel->find($id);
         if (! $cliente) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Cliente #{$id} não encontrado");
         }
 
-        // Busca os pedidos do cliente
-        $pedidos = $pedidoModel
-            ->where('cliente_id', $id)
-            ->orderBy('data_compra', 'DESC')
-            ->findAll();
+        $pedidos = $pedidoModel->getPedidosComClientes($id); // <- novo método
 
         // Cálculo de métricas
         $totalPedidos = count($pedidos);
@@ -173,9 +165,9 @@ class Clientes extends Controller
         $dataUltimoPedido = null;
 
         if ($totalPedidos > 0) {
-            $somaTotal = array_sum(array_map(fn($p) => (float) $p->valor, $pedidos));
+            $somaTotal = array_sum(array_map(fn($p) => (float) $p->total, $pedidos));
             $ticketMedio = number_format($somaTotal / $totalPedidos, 2, ',', '.');
-            $dataUltimoPedido = date('d/m/Y', strtotime($pedidos[0]->data_compra));
+            $dataUltimoPedido = date('d/m/Y', strtotime($pedidos[0]->data_entrega ?? $pedidos[0]->created_at));
         }
 
         return view('clientes/painel', [
