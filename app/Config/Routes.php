@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $routes->get('/', 'Clientes::index');
+$routes->get('pedidos', 'Pedidos::index');
 $routes->get('clientes', 'Clientes::index');
 $routes->get('clientes/criar', 'Clientes::criar');
 $routes->post('clientes/salvar', 'Clientes::salvar');
