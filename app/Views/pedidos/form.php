@@ -67,6 +67,21 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label for="forma_pagamento" class="form-label">Forma de Pagamento:</label>
+            <select name="forma_pagamento" id="forma_pagamento" class="form-select" required>
+                <?php
+                $formas = ['pix', 'dinheiro', 'cartão', 'boleto'];
+                $formaAtual = old('forma_pagamento', $pedido->forma_pagamento ?? 'pix');
+                foreach ($formas as $forma):
+                ?>
+                    <option value="<?= esc($forma) ?>" <?= $formaAtual === $forma ? 'selected' : '' ?>>
+                        <?= ucfirst($forma) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Salvar</button>
     </form>
 </div>

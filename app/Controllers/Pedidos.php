@@ -110,7 +110,7 @@ class Pedidos extends Controller
             'data_entrega'   => null,
             'descricao'      => $descricao,
             'status'         => $status,
-            'forma_pagamento' => 'pix',
+            'forma_pagamento' => $this->request->getPost('forma_pagamento'),
         ]);
 
         $cliente->total_gasto += $total;
@@ -200,6 +200,7 @@ class Pedidos extends Controller
         $descricao   = $this->request->getPost('descricao');
         $status      = $this->request->getPost('status');
 
+
         $erros = [];
 
         if ($valorNovo <= 0) {
@@ -218,6 +219,7 @@ class Pedidos extends Controller
             'data_compra' => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
             'descricao'   => $descricao,
             'status'      => $status,
+            'forma_pagamento' => $this->request->getPost('forma_pagamento'),
         ]);
 
         return redirect()->to('/clientes/historico/' . $clienteId)->with('success', 'Pedido atualizado com sucesso!');
