@@ -1,1 +1,7 @@
+# Ignorar arquivos da DebugBar
 writable/debugbar/
+writable/debugbar/*.json
+
+# Ignorar logs e sessões (opcional, mas recomendado)
+writable/logs/
+writable/session/
