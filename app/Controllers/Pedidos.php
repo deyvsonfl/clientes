@@ -157,4 +157,22 @@ class Pedidos extends Controller
 
         return redirect()->to('/clientes/historico/' . $cliente->id)->with('success', 'Pedido excluído com sucesso!');
     }
+
+    public function show($id)
+    {
+        $pedidoModel = new PedidosModel();
+        $pedido = $pedidoModel->find($id);
+
+        if (! $pedido) {
+            return redirect()->to('/clientes')->with('error', 'Pedido não encontrado.');
+        }
+
+        $clienteModel = new ClienteModel();
+        $cliente = $clienteModel->find($pedido->cliente_id);
+
+        return view('pedidos/show', [
+            'pedido'  => $pedido,
+            'cliente' => $cliente
+        ]);
+    }
 }
