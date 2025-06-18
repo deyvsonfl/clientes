@@ -5,6 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
 $routes->get('/', 'Clientes::index');
 $routes->get('clientes', 'Clientes::index');
 $routes->get('clientes/criar', 'Clientes::criar');
@@ -23,8 +24,4 @@ $routes->get('pedidos/excluir/(:num)', 'Pedidos::excluir/$1');
 $routes->get('/configuracoes', 'Configuracoes::index');
 $routes->post('configuracoes/salvar', 'Configuracoes::salvar');
 $routes->get('clientes/(:num)/painel', 'Clientes::painel/$1');
-
-
-
-
-
+$routes->get('pedidos/(:num)', 'Pedidos::show/$1');
