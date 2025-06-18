@@ -5,8 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\Controller;
 use CodeIgniter\I18n\Time;
 use App\Models\ClienteModel;
-use App\Models\PedidoModel;   // modelo novo (Option B)
-use App\Models\PedidosModel;  // modelo antigo (para métodos já existentes)
+use App\Models\PedidoModel;
 
 /**
  * Controller unificado para Pedidos
@@ -192,10 +191,9 @@ class Pedidos extends Controller
             return redirect()->back()->with('error', 'Este pedido não está disponível ou já foi removido.');
         }
 
-        $valorAntigo = $pedido->total;
-        $clienteId   = $pedido->cliente_id;
+        $clienteId = $pedido->cliente_id;
 
-        $valorNovo   = (float) $this->request->getPost('valor');
+        $totalNovo = (float) $this->request->getPost('total');
         $data        = $this->request->getPost('data');
         $descricao   = $this->request->getPost('descricao');
         $status      = $this->request->getPost('status');
@@ -203,7 +201,7 @@ class Pedidos extends Controller
 
         $erros = [];
 
-        if ($valorNovo <= 0) {
+        if ($totalNovo <= 0) {
             $erros[] = 'O valor do pedido deve ser maior que zero.';
         }
         if (empty($data)) {
@@ -215,7 +213,7 @@ class Pedidos extends Controller
         }
 
         $pedidoModel->update($id, [
-            'total'       => $valorNovo,
+            'total'       => $totalNovo,
             'data_compra' => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
             'descricao'   => $descricao,
             'status'      => $status,
