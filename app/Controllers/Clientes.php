@@ -139,11 +139,35 @@ class Clientes extends Controller
         $pedidoModel = new \App\Models\PedidoModel();
 
         $cliente = $clienteModel->find($id);
-        $pedidos = $pedidoModel->getPedidosComClientes($id); // <- novo método
+
+        // Filtros do GET
+        $status = $this->request->getGet('status');
+        $dataInicial = $this->request->getGet('data_inicial');
+        $dataFinal = $this->request->getGet('data_final');
+
+        // Base da consulta
+        $pedidoModel->where('cliente_id', $id);
+
+        if (!empty($status)) {
+            $pedidoModel->where('status', $status);
+        }
+
+        if (!empty($dataInicial)) {
+            $pedidoModel->where('data_compra >=', $dataInicial);
+        }
+
+        if (!empty($dataFinal)) {
+            $pedidoModel->where('data_compra <=', $dataFinal);
+        }
+
+        $pedidos = $pedidoModel->orderBy('data_compra', 'ASC')->findAll();
 
         return view('clientes/historico', [
             'cliente' => $cliente,
-            'pedidos' => $pedidos
+            'pedidos' => $pedidos,
+            'statusSelecionado' => $status,
+            'dataInicial' => $dataInicial,
+            'dataFinal' => $dataFinal,
         ]);
     }
 
