@@ -1,66 +1,71 @@
-<?php $this->extend('layouts/main'); ?>
-<?php $this->section('content'); ?>
-<?php $diasInatividade = $configuracoes['dias_inatividade'] ?? 60; ?>
+<?php // app/Views/dashboard/index.php 
+?>
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">Dashboard - <?= esc($configuracoes['nome_sistema'] ?? 'Sistema') ?></h1>
-    <p class="text-muted">Bem-vindo ao painel de controle. Aqui estão os principais indicadores de desempenho dos seus clientes.</p>
+<h3 class="mb-4">Dashboard - Mais Cartões</h3>
+<p class="text-muted">Bem-vindo ao painel de controle. Aqui estão os principais indicadores do seu sistema de clientes.</p>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        <div class="col">
-            <div class="card border-primary shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Total de Clientes</h5>
-                    <p class="card-text fs-4 fw-bold"><?= esc($totalClientes) ?></p>
-                </div>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card border-primary shadow-sm">
+            <div class="card-body">
+                <h6 class="text-primary">Total de Clientes</h6>
+                <h4 class="fw-bold mb-0"><?= esc($totalClientes) ?></h4>
             </div>
         </div>
-
-        <div class="col">
-            <div class="card border-success shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Clientes Recorrentes</h5>
-                    <p class="card-text fs-4 fw-bold"><?= esc($clientesRecorrentes) ?></p>
-                </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-success shadow-sm">
+            <div class="card-body">
+                <h6 class="text-success">Total de Pedidos</h6>
+                <h4 class="fw-bold mb-0"><?= esc($totalPedidos) ?></h4>
             </div>
         </div>
-
-        <div class="col">
-            <div class="card border-danger shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Clientes Inativos (&gt;<?= $diasInatividade ?> dias)</h5>
-                    <p class="card-text fs-4 fw-bold"><?= esc($clientesInativos) ?></p>
-                </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-dark shadow-sm">
+            <div class="card-body">
+                <h6 class="text-dark">Total Investido</h6>
+                <h4 class="fw-bold mb-0">R$ <?= number_format($totalInvestido, 2, ',', '.') ?></h4>
             </div>
         </div>
-
-        <div class="col">
-            <div class="card border-warning shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Ticket Médio</h5>
-                    <p class="card-text fs-4 fw-bold">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card border-info shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Cidade com Mais Clientes</h5>
-                    <p class="card-text fs-4 fw-bold"><?= esc($cidadeTop) ?></p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card border-dark shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Total Investido</h5>
-                    <p class="card-text fs-4 fw-bold">R$ <?= number_format($totalGasto, 2, ',', '.') ?></p>
-                </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-warning shadow-sm">
+            <div class="card-body">
+                <h6 class="text-warning">Ticket Médio</h6>
+                <h4 class="fw-bold mb-0">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h4>
             </div>
         </div>
     </div>
 </div>
 
-<?php $this->endSection(); ?>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card border-danger shadow-sm">
+            <div class="card-body">
+                <h6 class="text-danger">Clientes Inativos (<?= $diasInatividade ?>+ dias)</h6>
+                <h4 class="fw-bold mb-0"><?= esc($clientesInativos) ?></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-info shadow-sm">
+            <div class="card-body">
+                <h6 class="text-info">Clientes Recorrentes</h6>
+                <h4 class="fw-bold mb-0"><?= esc($clientesRecorrentes) ?></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-secondary shadow-sm">
+            <div class="card-body">
+                <h6 class="text-secondary">Cidade com Mais Clientes</h6>
+                <h4 class="fw-bold mb-0"><?= esc($cidadeTop ?? '-') ?></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?= $this->endSection() ?>
