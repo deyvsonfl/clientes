@@ -104,6 +104,7 @@ class Pedidos extends Controller
             'cliente_id'      => $cliente->id,
             'total'           => $total,
             'data_entrega'    => null,
+            'data_compra'     => Time::createFromFormat('Y-m-d', $data),
             'descricao'       => $descricao,
             'status'          => $status,
             'forma_pagamento' => $formaPagto,
