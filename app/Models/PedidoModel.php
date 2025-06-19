@@ -46,6 +46,13 @@ class PedidoModel extends Model
         'updated_at'   => '?datetime',
     ];
 
+    public const STATUS = [
+        'em_aberto'    => 'Em Aberto',
+        'em_producao'  => 'Em Produção',
+        'entregue'     => 'Entregue',
+        'cancelado'    => 'Cancelado',
+    ];
+
     /**
      * Retorna todos os pedidos já com o nome do cliente.
      * Ideal para a listagem /pedidos.

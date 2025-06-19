@@ -7,27 +7,19 @@ use CodeIgniter\I18n\Time;
 use App\Models\ClienteModel;
 use App\Models\PedidoModel;
 
-/**
- * Controller unificado para Pedidos
- * — adiciona método index() para listar TODOS os pedidos
- */
 class Pedidos extends Controller
 {
-    /**
-     * GET /pedidos
-     * Lista todos os pedidos de todos os clientes.
-     */
     public function index()
     {
         $pedidoModel = new PedidoModel();
         $perPage = 20;
 
         // Filtros
-        $status = $this->request->getGet('status');
+        $status          = $this->request->getGet('status');
         $forma_pagamento = $this->request->getGet('forma_pagamento');
-        $dataInicial = $this->request->getGet('data_inicial');
-        $dataFinal = $this->request->getGet('data_final');
-        $q = trim($this->request->getGet('q'));
+        $dataInicial     = $this->request->getGet('data_inicial');
+        $dataFinal       = $this->request->getGet('data_final');
+        $q               = trim($this->request->getGet('q'));
 
         $pedidoModel
             ->select('pedidos.*, clientes.nome AS cliente')
@@ -35,7 +27,7 @@ class Pedidos extends Controller
             ->orderBy('pedidos.created_at', 'DESC');
 
         if (!empty($status)) {
-            $pedidoModel->where('pedidos.status', $status);
+            $pedidoModel->where('pedidos.status', $status); // Ex: em_aberto, em_producao, etc.
         }
 
         if (!empty($forma_pagamento)) {
@@ -57,28 +49,23 @@ class Pedidos extends Controller
                 ->groupEnd();
         }
 
-        $dados = [
-            'pedidos' => $pedidoModel->paginate($perPage),
-            'pager'   => $pedidoModel->pager,
-            'status' => $status,
+        return view('pedidos/index', [
+            'pedidos'         => $pedidoModel->paginate($perPage),
+            'pager'           => $pedidoModel->pager,
+            'status'          => $status,
             'forma_pagamento' => $forma_pagamento,
             'dataInicial'     => $dataInicial,
             'dataFinal'       => $dataFinal,
-            'q' => $q,
-        ];
-
-        return view('pedidos/index', $dados);
+            'q'               => $q,
+        ]);
     }
 
-    /**
-     * Exibe formulário para adicionar pedido.
-     */
     public function adicionar()
     {
-        $clienteId     = $this->request->getGet('cliente_id');
-        $clienteModel  = new ClienteModel();
-        $clientes      = $clienteModel->findAll();
-        $cliente       = $clienteId ? $clienteModel->find($clienteId) : null;
+        $clienteId    = $this->request->getGet('cliente_id');
+        $clienteModel = new ClienteModel();
+        $clientes     = $clienteModel->findAll();
+        $cliente      = $clienteId ? $clienteModel->find($clienteId) : null;
 
         return view('pedidos/form', [
             'cliente'  => $cliente,
@@ -86,20 +73,18 @@ class Pedidos extends Controller
         ]);
     }
 
-    /**
-     * Salva novo pedido vindo do formulário.
-     */
     public function salvar()
     {
-        $clienteId    = $this->request->getPost('cliente_id');
-        $clienteModel = new ClienteModel();
-        $cliente      = $clienteModel->find($clienteId);
+        $clienteId     = $this->request->getPost('cliente_id');
+        $clienteModel  = new ClienteModel();
+        $cliente       = $clienteModel->find($clienteId);
 
-        $total        = (float) $this->request->getPost('total');
-        $data         = $this->request->getPost('data');
-        $descricao    = $this->request->getPost('descricao');
-        $status       = $this->request->getPost('status');
-        $erros        = [];
+        $total         = (float) $this->request->getPost('total');
+        $data          = $this->request->getPost('data');
+        $descricao     = $this->request->getPost('descricao');
+        $status        = $this->request->getPost('status');
+        $formaPagto    = $this->request->getPost('forma_pagamento');
+        $erros         = [];
 
         if (! $cliente) {
             $erros[] = 'O cliente selecionado não foi encontrado.';
@@ -116,12 +101,12 @@ class Pedidos extends Controller
 
         $pedidoModel = new PedidoModel();
         $pedidoModel->insert([
-            'cliente_id'     => $cliente->id,
-            'total'          => $total,
-            'data_entrega'   => null,
-            'descricao'      => $descricao,
-            'status'         => $status,
-            'forma_pagamento' => $this->request->getPost('forma_pagamento'),
+            'cliente_id'      => $cliente->id,
+            'total'           => $total,
+            'data_entrega'    => null,
+            'descricao'       => $descricao,
+            'status'          => $status,
+            'forma_pagamento' => $formaPagto,
         ]);
 
         $cliente->total_gasto += $total;
@@ -134,38 +119,37 @@ class Pedidos extends Controller
 
     public function excluir($id)
     {
-        $pedidoModel = new \App\Models\PedidoModel();
-        $pedido = $pedidoModel->find($id);
+        $pedidoModel  = new PedidoModel();
+        $pedido       = $pedidoModel->find($id);
 
         if (! $pedido) {
             return redirect()->back()->with('error', 'Não encontramos esse pedido para excluir.');
         }
 
-        $clienteModel = new \App\Models\ClienteModel();
-        $cliente = $clienteModel->find($pedido->cliente_id);
+        $clienteModel = new ClienteModel();
+        $cliente      = $clienteModel->find($pedido->cliente_id);
 
-        // Corrigido: campo correto é total
         $cliente->total_gasto -= $pedido->total;
         $clienteModel->save($cliente);
 
-        // Exclusão forçada, já que useSoftDeletes = false
         $pedidoModel->delete($id, true);
 
-        return redirect()->to('/clientes/historico/' . $cliente->id)->with('success', 'Pedido excluído com sucesso!');
+        return redirect()->to('/clientes/historico/' . $cliente->id)
+            ->with('success', 'Pedido excluído com sucesso!');
     }
 
     public function editar($id)
     {
         $pedidoModel = new PedidoModel();
-        $pedido = $pedidoModel->find($id);
+        $pedido      = $pedidoModel->find($id);
 
         if (! $pedido) {
             return redirect()->back()->with('error', 'Não foi possível localizar este pedido.');
         }
 
         $clienteModel = new ClienteModel();
-        $cliente = $clienteModel->find($pedido->cliente_id);
-        $clientes = $clienteModel->findAll();
+        $cliente      = $clienteModel->find($pedido->cliente_id);
+        $clientes     = $clienteModel->findAll();
 
         $pedido->total = number_format((float) $pedido->total, 2, '.', '');
 
@@ -178,15 +162,15 @@ class Pedidos extends Controller
 
     public function show($id)
     {
-        $pedidoModel = new PedidoModel();
-        $pedido = $pedidoModel->find($id);
+        $pedidoModel  = new PedidoModel();
+        $pedido       = $pedidoModel->find($id);
 
         if (! $pedido) {
             return redirect()->to('/clientes')->with('error', 'Pedido não encontrado.');
         }
 
         $clienteModel = new ClienteModel();
-        $cliente = $clienteModel->find($pedido->cliente_id);
+        $cliente      = $clienteModel->find($pedido->cliente_id);
 
         return view('pedidos/show', [
             'pedido'  => $pedido,
@@ -197,19 +181,18 @@ class Pedidos extends Controller
     public function atualizar($id)
     {
         $pedidoModel = new PedidoModel();
-        $pedido = $pedidoModel->find($id);
+        $pedido      = $pedidoModel->find($id);
 
         if (! $pedido) {
             return redirect()->back()->with('error', 'Este pedido não está disponível ou já foi removido.');
         }
 
-        $clienteId = $pedido->cliente_id;
-
-        $totalNovo = (float) $this->request->getPost('total');
-        $data        = $this->request->getPost('data');
-        $descricao   = $this->request->getPost('descricao');
-        $status      = $this->request->getPost('status');
-
+        $clienteId    = $pedido->cliente_id;
+        $totalNovo    = (float) $this->request->getPost('total');
+        $data         = $this->request->getPost('data');
+        $descricao    = $this->request->getPost('descricao');
+        $status       = $this->request->getPost('status');
+        $formaPagto   = $this->request->getPost('forma_pagamento');
 
         $erros = [];
 
@@ -225,13 +208,14 @@ class Pedidos extends Controller
         }
 
         $pedidoModel->update($id, [
-            'total'       => $totalNovo,
-            'data_compra' => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
-            'descricao'   => $descricao,
-            'status'      => $status,
-            'forma_pagamento' => $this->request->getPost('forma_pagamento'),
+            'total'           => $totalNovo,
+            'data_compra'     => Time::createFromFormat('Y-m-d H:i:s', $data . ' 00:00:00'),
+            'descricao'       => $descricao,
+            'status'          => $status,
+            'forma_pagamento' => $formaPagto,
         ]);
 
-        return redirect()->to('/clientes/historico/' . $clienteId)->with('success', 'Pedido atualizado com sucesso!');
+        return redirect()->to('/clientes/historico/' . $clienteId)
+            ->with('success', 'Pedido atualizado com sucesso!');
     }
 }

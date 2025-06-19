@@ -31,12 +31,6 @@
         <a href="<?= site_url('/') ?>" class="btn btn-outline-secondary">
           <i class="bi bi-arrow-left"></i> Voltar
         </a>
-        <form class="d-flex" method="get" action="">
-          <div class="input-group">
-            <input class="form-control" type="search" name="q" placeholder="Buscar por cliente ou descrição…">
-            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-          </div>
-        </form>
       </div>
     </div>
 
@@ -47,10 +41,11 @@
             <label for="status" class="form-label mb-0">Status</label>
             <select class="form-select" id="status" name="status">
               <option value="">Todos</option>
-              <option value="em_aberto" <?= ($status ?? '') === 'em_aberto' ? 'selected' : '' ?>>Em aberto</option>
-              <option value="em_producao" <?= ($status ?? '') === 'em_producao' ? 'selected' : '' ?>>Em produção</option>
-              <option value="entregue" <?= ($status ?? '') === 'entregue' ? 'selected' : '' ?>>Entregue</option>
-              <option value="cancelado" <?= ($status ?? '') === 'cancelado' ? 'selected' : '' ?>>Cancelado</option>
+              <?php foreach (\App\Models\PedidoModel::STATUS as $valor => $rotulo): ?>
+                <option value="<?= $valor ?>" <?= ($status ?? '') === $valor ? 'selected' : '' ?>>
+                  <?= $rotulo ?>
+                </option>
+              <?php endforeach; ?>
             </select>
           </div>
           <div class="col">
@@ -90,38 +85,39 @@
         <table class="table table-bordered table-hover align-middle mb-0">
           <thead class="table-secondary text-center">
             <tr>
-              <th class="col-id">#</th>
-              <th>Cliente</th>
-              <th>Descrição</th>
-              <th>Status</th>
-              <th>Forma Pagto</th>
-              <th>Entrega</th>
-              <th class="col-total text-end">Total (R$)</th>
-              <th>Criado em</th>
+              <th class="col-id text-center">#</th>
+              <th class="text-center">Cliente</th>
+              <th class="text-center">Descrição</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Forma Pagto</th>
+              <th class="text-center">Entrega</th>
+              <th class="col-total text-center">Total (R$)</th>
+              <th class="text-center">Data do Pedido</th>
             </tr>
           </thead>
           <tbody>
             <?php if ($pedidos): foreach ($pedidos as $p): ?>
                 <tr>
                   <td class="text-center fw-bold"><?= esc($p->id) ?></td>
-                  <td><?= esc($p->cliente) ?></td>
-                  <td><?= esc($p->descricao) ?></td>
+                  <td class="text-center"><?= esc($p->cliente) ?></td>
+                  <td class="text-center"><?= esc($p->descricao) ?></td>
                   <td class="text-center">
                     <?php
-                    $map = [
-                      'em_aberto' => ['secondary', 'Em aberto'],
-                      'em_producao' => ['warning', 'Em produção'],
-                      'entregue' => ['success', 'Entregue'],
-                      'cancelado' => ['danger', 'Cancelado']
+                    $cores = [
+                      'em_aberto'    => 'secondary',
+                      'em_producao'  => 'warning',
+                      'entregue'     => 'success',
+                      'cancelado'    => 'danger',
                     ];
-                    [$clr, $lbl] = $map[$p->status] ?? ['dark', '-'];
+                    $rotulo = \App\Models\PedidoModel::STATUS[$p->status] ?? ucfirst($p->status);
+                    $cor    = $cores[$p->status] ?? 'dark';
                     ?>
-                    <span class="badge bg-<?= $clr ?>"><?= $lbl ?></span>
+                    <span class="badge bg-<?= $cor ?>"><?= $rotulo ?></span>
                   </td>
-                  <td><?= $p->forma_pagamento ? esc(ucfirst($p->forma_pagamento)) : '-' ?></td>
-                  <td><?= $p->data_entrega ? esc(date('d/m/Y', strtotime($p->data_entrega))) : '-' ?></td>
-                  <td class="text-end fw-semibold"><?= number_format($p->total, 2, ',', '.') ?></td>
-                  <td><?= $p->created_at ? esc(date('d/m/Y H:i', strtotime($p->created_at))) : '-' ?></td>
+                  <td class="text-center"><?= $p->forma_pagamento ? esc(ucfirst($p->forma_pagamento)) : '-' ?></td>
+                  <td class="text-center"><?= $p->data_entrega ? esc(date('d/m/Y', strtotime($p->data_entrega))) : '-' ?></td>
+                  <td class="text-center fw-semibold"><?= number_format($p->total, 2, ',', '.') ?></td>
+                  <td class="text-center"><?= $p->data_compra ? esc(date('d/m/Y', strtotime($p->data_compra))) : '-' ?></td>
                 </tr>
               <?php endforeach;
             else: ?>
