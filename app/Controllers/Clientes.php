@@ -206,22 +206,24 @@ class Clientes extends Controller
         $totalPedidos = count($pedidos);
         $ticketMedio = 0;
         $dataUltimoPedido = null;
+        $valorTotal = 0;
 
         if ($totalPedidos > 0) {
-            $somaTotal = array_sum(array_map(fn($p) => (float) $p->total, $pedidos));
-            $ticketMedio = number_format($somaTotal / $totalPedidos, 2, ',', '.');
+            $valorTotal = array_sum(array_map(fn($p) => (float) $p->total, $pedidos));
+            $ticketMedio = number_format($valorTotal / $totalPedidos, 2, ',', '.');
             $dataUltimoPedido = date('d/m/Y', strtotime($pedidos[0]->data_compra ?? $pedidos[0]->created_at));
         }
 
         return view('clientes/painel', [
-            'cliente'          => $cliente,
-            'pedidos'          => $pedidos,
-            'totalPedidos'     => $totalPedidos,
-            'ticketMedio'      => $ticketMedio,
-            'dataUltimoPedido' => $dataUltimoPedido,
+            'cliente'           => $cliente,
+            'pedidos'           => $pedidos,
+            'totalPedidos'      => $totalPedidos,
+            'ticketMedio'       => $ticketMedio,
+            'dataUltimoPedido'  => $dataUltimoPedido,
+            'valorTotal'        => $valorTotal,
             'statusSelecionado' => $status,
-            'dataInicial'      => $dataInicial,
-            'dataFinal'        => $dataFinal,
+            'dataInicial'       => $dataInicial,
+            'dataFinal'         => $dataFinal,
         ]);
     }
 }

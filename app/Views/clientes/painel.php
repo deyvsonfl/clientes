@@ -23,7 +23,7 @@
 
 <!-- Métricas do Cliente -->
 <div class="row g-3 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center">
                 <i class="bi bi-bag-check fs-2 text-primary me-3"></i>
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center">
                 <i class="bi bi-currency-dollar fs-2 text-success me-3"></i>
@@ -45,7 +45,18 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-body d-flex align-items-center">
+                <i class="bi bi-wallet2 fs-2 text-info me-3"></i>
+                <div>
+                    <h6 class="mb-0">Valor Total</h6>
+                    <h5 class="mb-0">R$ <?= number_format($valorTotal ?? 0, 2, ',', '.') ?></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex align-items-center">
                 <i class="bi bi-calendar-check fs-2 text-warning me-3"></i>
