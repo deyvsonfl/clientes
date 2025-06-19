@@ -10,7 +10,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-primary mb-1">Total de Clientes</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-people-fill text-primary me-1"></i> Total de Clientes</h6>
                     <h4 class="fw-bold mb-0 text-dark"><?= esc($totalClientes) ?></h4>
                 </div>
             </div>
@@ -18,7 +18,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-success mb-1">Total de Pedidos</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-bag-check-fill text-success me-1"></i>Total de Pedidos</h6>
                     <h4 class="fw-bold mb-0 text-dark"><?= esc($totalPedidos) ?></h4>
                 </div>
             </div>
@@ -26,7 +26,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-dark mb-1">Total Investido</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-wallet2 text-dark me-1"></i> Total Investido</h6>
                     <h4 class="fw-bold mb-0 text-dark">R$ <?= number_format($totalInvestido, 2, ',', '.') ?></h4>
                 </div>
             </div>
@@ -34,7 +34,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-warning mb-1">Ticket Médio</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-graph-up-arrow text-warning me-1"></i> Ticket Médio</h6>
                     <h4 class="fw-bold mb-0 text-dark">R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h4>
                 </div>
             </div>
@@ -42,7 +42,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-danger mb-1">Clientes Inativos (<?= $diasInatividade ?>+ dias)</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-person-dash-fill text-danger me-1"></i> Clientes Inativos (<?= $diasInatividade ?>+ dias)</h6>
                     <h4 class="fw-bold mb-0 text-dark"><?= esc($clientesInativos) ?></h4>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-info mb-1">Clientes Recorrentes</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-repeat text-info me-1"></i> Clientes Recorrentes</h6>
                     <h4 class="fw-bold mb-0 text-dark"><?= esc($clientesRecorrentes) ?></h4>
                 </div>
             </div>
@@ -58,7 +58,7 @@
         <div class="col">
             <div class="card border-0 shadow-sm h-100 rounded-4">
                 <div class="card-body">
-                    <h6 class="text-secondary mb-1">Cidade com Mais Clientes</h6>
+                    <h6 class="text-muted mb-1"><i class="bi bi-geo-alt-fill text-secondary me-1"></i> Cidade com Mais Clientes</h6>
                     <h4 class="fw-bold mb-0 text-dark"><?= esc($cidadeTop ?? '-') ?></h4>
                 </div>
             </div>
