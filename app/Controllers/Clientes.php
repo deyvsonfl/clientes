@@ -181,9 +181,28 @@ class Clientes extends Controller
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Cliente #{$id} não encontrado");
         }
 
-        $pedidos = $pedidoModel->getPedidosComClientes($id); // <- novo método
+        // Filtros via GET
+        $status = $this->request->getGet('status');
+        $dataInicial = $this->request->getGet('data_inicial');
+        $dataFinal = $this->request->getGet('data_final');
 
-        // Cálculo de métricas
+        $pedidoModel->where('cliente_id', $id);
+
+        if (!empty($status)) {
+            $pedidoModel->where('status', $status);
+        }
+
+        if (!empty($dataInicial)) {
+            $pedidoModel->where('data_compra >=', $dataInicial);
+        }
+
+        if (!empty($dataFinal)) {
+            $pedidoModel->where('data_compra <=', $dataFinal);
+        }
+
+        $pedidos = $pedidoModel->orderBy('data_compra', 'DESC')->findAll();
+
+        // Métricas filtradas
         $totalPedidos = count($pedidos);
         $ticketMedio = 0;
         $dataUltimoPedido = null;
@@ -191,15 +210,18 @@ class Clientes extends Controller
         if ($totalPedidos > 0) {
             $somaTotal = array_sum(array_map(fn($p) => (float) $p->total, $pedidos));
             $ticketMedio = number_format($somaTotal / $totalPedidos, 2, ',', '.');
-            $dataUltimoPedido = date('d/m/Y', strtotime($pedidos[0]->data_entrega ?? $pedidos[0]->created_at));
+            $dataUltimoPedido = date('d/m/Y', strtotime($pedidos[0]->data_compra ?? $pedidos[0]->created_at));
         }
 
         return view('clientes/painel', [
-            'cliente'           => $cliente,
-            'pedidos'           => $pedidos,
-            'totalPedidos'      => $totalPedidos,
-            'ticketMedio'       => $ticketMedio,
-            'dataUltimoPedido'  => $dataUltimoPedido,
+            'cliente'          => $cliente,
+            'pedidos'          => $pedidos,
+            'totalPedidos'     => $totalPedidos,
+            'ticketMedio'      => $ticketMedio,
+            'dataUltimoPedido' => $dataUltimoPedido,
+            'statusSelecionado' => $status,
+            'dataInicial'      => $dataInicial,
+            'dataFinal'        => $dataFinal,
         ]);
     }
 }

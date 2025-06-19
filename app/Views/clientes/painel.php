@@ -67,7 +67,40 @@
         </a>
     </div>
     <div class="card-body table-responsive">
+        <form method="get" class="row g-2 align-items-end mb-3">
+            <input type="hidden" name="id" value="<?= $cliente->id ?>">
 
+            <div class="col-md-3">
+                <label for="data_inicial" class="form-label small mb-1">De:</label>
+                <input type="date" name="data_inicial" id="data_inicial" class="form-control form-control-sm"
+                    value="<?= esc($dataInicial ?? '') ?>">
+            </div>
+
+            <div class="col-md-3">
+                <label for="data_final" class="form-label small mb-1">Até:</label>
+                <input type="date" name="data_final" id="data_final" class="form-control form-control-sm"
+                    value="<?= esc($dataFinal ?? '') ?>">
+            </div>
+
+            <div class="col-md-3">
+                <label for="status" class="form-label small mb-1">Status:</label>
+                <select name="status" id="status" class="form-select form-select-sm">
+                    <option value="">Todos</option>
+                    <?php foreach (['aberto', 'em produção', 'entregue', 'cancelado'] as $opcao): ?>
+                        <option value="<?= $opcao ?>" <?= ($statusSelecionado ?? '') === $opcao ? 'selected' : '' ?>>
+                            <?= ucfirst($opcao) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-outline-dark w-50">Filtrar</button>
+                <a href="<?= base_url('/clientes/painel/' . $cliente->id) ?>" class="btn btn-sm btn-link w-50 text-muted">
+                    Limpar
+                </a>
+            </div>
+        </form>
         <table class="table table-hover align-middle">
             <thead class="table-light">
                 <tr>
