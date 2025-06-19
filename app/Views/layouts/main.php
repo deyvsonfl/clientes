@@ -75,11 +75,14 @@ if (!isset($configuracoes)) {
             <nav class="col-md-2 d-none d-md-block sidebar py-4">
                 <div class="position-sticky">
                     <ul class="nav flex-column px-2">
+                        <!-- Menu principal -->
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('dashboard') ? 'active' : '' ?>" href="<?= base_url('/dashboard') ?>">
                                 <i class="bi bi-graph-up"></i> Dashboard
                             </a>
                         </li>
+
+                        <!-- Clientes e Pedidos -->
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('clientes*') ? 'active' : '' ?>" href="<?= base_url('/clientes') ?>">
                                 <i class="bi bi-people-fill"></i> Clientes
@@ -90,13 +93,23 @@ if (!isset($configuracoes)) {
                                 <i class="bi bi-plus-circle"></i> Novo Pedido
                             </a>
                         </li>
+                        <?php $uri = service('uri'); ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= $uri->getSegment(1) == 'pedidos' ? 'active' : '' ?>" href="<?= base_url('pedidos') ?>">
+                                <i class="bi bi-receipt-cutoff me-2"></i> Pedidos
+                            </a>
+                        </li>
+
                         <hr>
+
+                        <!-- Outras opções -->
                         <li class="nav-item">
                             <a class="nav-link <?= url_is('configuracoes') ? 'active' : '' ?>" href="<?= base_url('/configuracoes') ?>">
-                                ⚙️ Configurações
+                                <i class="bi bi-gear"></i> Configurações
                             </a>
                         </li>
                     </ul>
+
                 </div>
             </nav>
 
