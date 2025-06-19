@@ -24,8 +24,12 @@ if (!isset($configuracoes)) {
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Fontes Google (Inter, Montserrat, Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
     <style>
         body {
+            font-family: 'Inter', 'Montserrat', 'Roboto', sans-serif;
             background-color: #f8f9fa;
         }
 
@@ -35,6 +39,7 @@ if (!isset($configuracoes)) {
             background-color: #fdfdfd;
             box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.05);
         }
+
 
         .nav-link {
             font-weight: 500;
