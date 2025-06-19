@@ -27,8 +27,8 @@
             <tbody>
                 <?php foreach ($pedidos as $pedido): ?>
                     <tr>
-                        <td><?= formatar_data_br($pedido->data_compra) ?></td>
-                        <td><?= formatar_real($pedido->valor) ?></td>
+                        <td><?= isset($pedido->data_compra) ? date('d/m/Y', strtotime($pedido->data_compra)) : '-' ?></td>
+                        <td>R$ <?= number_format($pedido->total, 2, ',', '.') ?></td>
                         <td><?= esc($pedido->descricao) ?></td>
                         <td><?= esc($pedido->status) ?></td>
                         <td class="text-center">

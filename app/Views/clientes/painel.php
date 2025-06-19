@@ -83,9 +83,9 @@
                     <?php foreach ($pedidos as $pedido): ?>
                         <tr>
                             <td><?= esc($pedido->id) ?></td>
-                            <td><?= esc($pedido->data) ?></td>
-                            <td><?= esc($pedido->produto) ?></td>
-                            <td>R$ <?= esc($pedido->valor) ?></td>
+                            <td><?= isset($pedido->data_compra) ? date('d/m/Y', strtotime($pedido->data_compra)) : '-' ?></td>
+                            <td><?= esc($pedido->descricao) ?></td>
+                            <td>R$ <?= number_format($pedido->total, 2, ',', '.') ?></td>
                             <td><?= esc($pedido->status) ?></td>
                             <td class="text-end">
                                 <a href="<?= base_url('/pedidos/' . $pedido->id) ?>" class="btn btn-sm btn-outline-info" title="Ver">
