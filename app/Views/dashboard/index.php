@@ -10,6 +10,15 @@
     body {
         font-family: 'Inter', 'Montserrat', 'Roboto', sans-serif;
     }
+
+    @media (max-width: 768px) {
+
+        .form-select,
+        .form-control,
+        .btn {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="container-fluid py-4">
@@ -75,73 +84,129 @@
         </div>
     </div>
 
-    <!-- Gráfico de Vendas -->
-    <div class="card border-0 shadow-sm rounded-4 mt-5">
-        <div class="card-body">
-            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
-                <h5 class="mb-0 fw-semibold text-dark"><i class="bi bi-bar-chart-line text-primary me-1"></i> Vendas</h5>
-                <form class="d-flex flex-wrap gap-2 align-items-center w-100 w-md-auto">
-                    <select class="form-select form-select-sm" id="filtro-vendas">
-                        <option value="semana">Últimos 7 dias</option>
-                        <option value="mes">Este mês</option>
-                        <option value="ano">Este ano</option>
-                        <option value="personalizado">Personalizado</option>
-                    </select>
-                    <input type="date" id="inicio" class="form-control form-control-sm" style="display: none">
-                    <input type="date" id="fim" class="form-control form-control-sm" style="display: none">
-                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnFiltrar">Aplicar</button>
-                </form>
+    <!-- Gráfico de Vendas e Últimos Pedidos -->
+    <div class="row mt-5 g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-3">
+                        <h5 class="mb-0 fw-semibold text-dark"><i class="bi bi-bar-chart-line text-primary me-1"></i> Vendas</h5>
+                        <form class="d-flex flex-wrap gap-2 align-items-center w-100 w-md-auto">
+                            <select class="form-select form-select-sm" id="filtro-vendas">
+                                <option value="semana">Últimos 7 dias</option>
+                                <option value="mes">Este mês</option>
+                                <option value="ano">Este ano</option>
+                                <option value="personalizado">Personalizado</option>
+                            </select>
+                            <input type="date" id="inicio" class="form-control form-control-sm" style="display: none">
+                            <input type="date" id="fim" class="form-control form-control-sm" style="display: none">
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnFiltrar">Aplicar</button>
+                        </form>
+                    </div>
+                    <div class="position-relative overflow-hidden">
+                        <canvas id="graficoVendas" height="100"></canvas>
+                    </div>
+                </div>
             </div>
-            <div class="position-relative overflow-hidden">
-                <canvas id="graficoVendas" height="100"></canvas>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="fw-semibold text-dark mb-3"><i class="bi bi-clock-history text-secondary me-1"></i> Últimos Pedidos</h5>
+                    <ul class="list-group list-group-flush">
+                        <?php if (isset($ultimosPedidos) && is_array($ultimosPedidos)): ?>
+                            <?php foreach ($ultimosPedidos as $pedido): ?>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <div class="fw-semibold"><?= esc($pedido->cliente_nome) ?></div>
+                                        <small class="text-muted"><?= esc($pedido->descricao) ?> — <?= date('d/m/Y', strtotime($pedido->data_compra)) ?></small>
+                                    </div>
+                                    <span class="fw-bold">R$ <?= number_format($pedido->total, 2, ',', '.') ?></span>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li class="list-group-item text-muted">Nenhum pedido recente encontrado.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const ctx = document.getElementById('graficoVendas').getContext('2d');
-    const grafico = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-            datasets: [{
-                label: 'Vendas (R$)',
-                data: [120, 90, 150, 100, 200, 180, 130],
-                fill: true,
-                backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                borderColor: '#0d6efd',
-                tension: 0.4,
-                pointRadius: 3,
-                pointHoverRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false
-                }
-            },
-            interaction: {
-                mode: 'nearest',
-                axis: 'x',
-                intersect: false
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: value => 'R$ ' + value.toFixed(2).replace('.', ',')
+    let grafico;
+
+    function carregarGrafico(tipo = 'semana', inicio = '', fim = '') {
+        fetch(`/dashboard/dados-grafico?tipo=${tipo}&inicio=${inicio}&fim=${fim}`)
+            .then(response => response.json())
+            .then(dados => {
+                const labels = dados.map(item => item.dia.split('-').reverse().join('/'));
+                const valores = dados.map(item => parseFloat(item.total));
+
+                if (grafico) grafico.destroy();
+
+                const ctx = document.getElementById('graficoVendas').getContext('2d');
+                grafico = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Vendas (R$)',
+                            data: valores,
+                            fill: true,
+                            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                            borderColor: '#0d6efd',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: value => 'R$ ' + value.toFixed(2).replace('.', ',')
+                                }
+                            }
+                        }
                     }
-                }
-            }
-        }
+                });
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const filtro = document.getElementById('filtro-vendas');
+        const inicio = document.getElementById('inicio');
+        const fim = document.getElementById('fim');
+        const btn = document.getElementById('btnFiltrar');
+
+        const toggleDatas = () => {
+            const show = filtro.value === 'personalizado';
+            inicio.style.display = show ? 'block' : 'none';
+            fim.style.display = show ? 'block' : 'none';
+        };
+
+        filtro.addEventListener('change', toggleDatas);
+        btn.addEventListener('click', () => {
+            carregarGrafico(filtro.value, inicio.value, fim.value);
+        });
+
+        carregarGrafico(); // inicial
     });
 </script>
 

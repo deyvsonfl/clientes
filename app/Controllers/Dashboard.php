@@ -53,4 +53,32 @@ class Dashboard extends BaseController
             'cidadeTop'           => $cidadeMaisClientes,
         ]);
     }
+
+    public function dadosGraficoVendas()
+    {
+        $tipo = $this->request->getGet('tipo');
+        $inicio = $this->request->getGet('inicio');
+        $fim = $this->request->getGet('fim');
+
+        $pedidoModel = new \App\Models\PedidoModel();
+        $builder = $pedidoModel->select("DATE(data_compra) as dia, SUM(total) as total")
+            ->groupBy('dia')
+            ->orderBy('dia', 'ASC');
+
+        if ($tipo === 'semana') {
+            $builder->where('data_compra >=', date('Y-m-d', strtotime('-6 days')));
+        } elseif ($tipo === 'mes') {
+            $builder->where('MONTH(data_compra)', date('m'))
+                ->where('YEAR(data_compra)', date('Y'));
+        } elseif ($tipo === 'ano') {
+            $builder->where('YEAR(data_compra)', date('Y'));
+        } elseif ($tipo === 'personalizado' && $inicio && $fim) {
+            $builder->where('data_compra >=', $inicio)
+                ->where('data_compra <=', $fim);
+        }
+
+        $dados = $builder->findAll();
+
+        return $this->response->setJSON($dados);
+    }
 }

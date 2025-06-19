@@ -26,3 +26,4 @@ $routes->get('/configuracoes', 'Configuracoes::index');
 $routes->post('configuracoes/salvar', 'Configuracoes::salvar');
 $routes->get('clientes/(:num)/painel', 'Clientes::painel/$1');
 $routes->get('pedidos/(:num)', 'Pedidos::show/$1');
+$routes->get('dashboard/dados-grafico', 'Dashboard::dadosGraficoVendas');
