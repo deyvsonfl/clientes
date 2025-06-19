@@ -63,6 +63,16 @@
             </select>
           </div>
           <div class="col">
+            <label for="data_inicial" class="form-label mb-0">De</label>
+            <input type="date" name="data_inicial" id="data_inicial" class="form-control"
+              value="<?= esc($dataInicial ?? '') ?>">
+          </div>
+          <div class="col">
+            <label for="data_final" class="form-label mb-0">Até</label>
+            <input type="date" name="data_final" id="data_final" class="form-control"
+              value="<?= esc($dataFinal ?? '') ?>">
+          </div>
+          <div class="col">
             <label for="q" class="form-label mb-0">Busca</label>
             <input type="search" name="q" id="q" value="<?= esc($q ?? '') ?>" class="form-control" placeholder="Cliente ou descrição…">
           </div>

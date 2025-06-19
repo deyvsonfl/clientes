@@ -25,6 +25,8 @@ class Pedidos extends Controller
         // Filtros
         $status = $this->request->getGet('status');
         $forma_pagamento = $this->request->getGet('forma_pagamento');
+        $dataInicial = $this->request->getGet('data_inicial');
+        $dataFinal = $this->request->getGet('data_final');
         $q = trim($this->request->getGet('q'));
 
         $pedidoModel
@@ -40,6 +42,14 @@ class Pedidos extends Controller
             $pedidoModel->where('pedidos.forma_pagamento', $forma_pagamento);
         }
 
+        if (!empty($dataInicial)) {
+            $pedidoModel->where('data_compra >=', $dataInicial);
+        }
+
+        if (!empty($dataFinal)) {
+            $pedidoModel->where('data_compra <=', $dataFinal);
+        }
+
         if (!empty($q)) {
             $pedidoModel->groupStart()
                 ->like('clientes.nome', $q)
@@ -52,6 +62,8 @@ class Pedidos extends Controller
             'pager'   => $pedidoModel->pager,
             'status' => $status,
             'forma_pagamento' => $forma_pagamento,
+            'dataInicial'     => $dataInicial,
+            'dataFinal'       => $dataFinal,
             'q' => $q,
         ];
 
