@@ -139,6 +139,11 @@
                                 <a href="<?= base_url('/pedidos/editar/' . $pedido->id) ?>" class="btn btn-sm btn-outline-secondary" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
+                                <a href="<?= base_url("pedidos/excluir/{$pedido->id}") ?>"
+                                    onclick="return confirm('Tem certeza que deseja excluir este pedido?')"
+                                    class="btn btn-sm btn-outline-danger" title="Excluir Pedido">
+                                    <i class="bi bi-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
