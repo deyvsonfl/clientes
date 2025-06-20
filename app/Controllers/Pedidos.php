@@ -135,8 +135,7 @@ class Pedidos extends Controller
 
         $pedidoModel->delete($id, true);
 
-        return redirect()->to('/clientes/historico/' . $cliente->id)
-            ->with('success', 'Pedido excluído com sucesso!');
+        return redirect()->back()->with('success', 'Pedido excluído com sucesso!');
     }
 
     public function editar($id)
