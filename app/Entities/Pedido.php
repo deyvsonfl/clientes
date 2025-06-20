@@ -10,7 +10,7 @@ class Pedido extends Entity
 
   public function getValorFormatado()
   {
-    return number_format((float) $this->attributes['valor'], 2, ',', '.');
+    return number_format((float) ($this->attributes['total'] ?? 0), 2, ',', '.');
   }
 
   public function getDataCompraFormatada()

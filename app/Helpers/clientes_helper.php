@@ -28,3 +28,15 @@ if (!function_exists('statusCliente')) {
         return '<span class="badge bg-danger">Inativo</span>';
     }
 }
+
+if (!function_exists('badge_recorrente')) {
+    /**
+     * Retorna um badge indicando se o cliente é recorrente.
+     */
+    function badge_recorrente($valor)
+    {
+        return $valor
+            ? '<span class="badge bg-success">Sim</span>'
+            : '<span class="badge bg-secondary">Não</span>';
+    }
+}
